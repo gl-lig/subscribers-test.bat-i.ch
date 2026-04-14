@@ -16,13 +16,13 @@
     @endif
 
     <!-- User identification -->
-    <div class="mb-6 flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200">
-        <div class="flex h-14 w-10 flex-shrink-0 items-center justify-center rounded-xl" style="background: linear-gradient(to bottom, #00004D 0%, #0050FF 50%, #3DFF9E 100%);">
-            <img src="{{ asset('assets/brand/BATID_Monogramme_blanc.svg') }}" alt="bat-id" class="h-5 w-5">
+    <div class="mb-6 flex items-center gap-5 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+        <div class="flex h-16 w-12 flex-shrink-0 items-center justify-center rounded-2xl" style="background: linear-gradient(to bottom, #00004D 0%, #0050FF 50%, #3DFF9E 100%);">
+            <img src="{{ asset('assets/brand/BATID_Monogramme_blanc.svg') }}" alt="bat-id" class="h-6 w-6">
         </div>
         <div class="min-w-0">
-            <p class="text-sm font-bold text-batid-marine">{{ session('bat_id') }}</p>
-            <p class="text-sm text-gray-500">{{ session('bat_phone') }}</p>
+            <p class="text-lg font-bold text-batid-marine">{{ session('bat_id') }}</p>
+            <p class="text-base text-gray-600">{{ session('bat_phone') }}</p>
         </div>
     </div>
 
