@@ -66,7 +66,7 @@
         offset() {
             return -(this.current * (this.cardWidth + this.gap));
         }
-    }" x-resize="measure()">
+    }">
         <div class="relative mx-auto max-w-7xl px-4" x-ref="container">
 
             {{-- Flèche gauche --}}
