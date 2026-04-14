@@ -21,6 +21,7 @@
                 <td class="px-4 py-3 text-sm text-gray-600">{{ $admin->email }}</td>
                 <td class="px-4 py-3">
                     @if($admin->role === 'super_admin')<span class="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-800">Super Admin</span>
+                    @elseif($admin->role === 'api_user')<span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">API User</span>
                     @else<span class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">Admin</span>@endif
                 </td>
                 <td class="px-4 py-3">

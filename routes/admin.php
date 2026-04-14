@@ -31,56 +31,60 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Protected admin routes
     Route::middleware(['admin.auth', 'admin.2fa', 'admin.timeout'])->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // Subscribers
-        Route::get('/subscribers', [AdminSubscriberController::class, 'index'])->name('subscribers.index');
-        Route::get('/subscribers/{subscriber}', [AdminSubscriberController::class, 'show'])->name('subscribers.show');
-
-        // Subscription types
-        Route::resource('subscription-types', AdminSubscriptionTypeController::class)->except(['show']);
-        Route::post('/subscription-types/reorder', [AdminSubscriptionTypeController::class, 'reorder'])->name('subscription-types.reorder');
-
-        // Orders
-        Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
-        Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
-        Route::post('/orders/{order}/replay-notification', [AdminOrderController::class, 'replayNotification'])->name('orders.replay');
-        Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
-
-        // Promo codes
-        Route::resource('promo-codes', AdminPromoCodeController::class)->except(['show']);
-
-        // User groups
-        Route::resource('user-groups', AdminUserGroupController::class);
-        Route::post('/user-groups/{userGroup}/members', [AdminUserGroupController::class, 'addMember'])->name('user-groups.members.add');
-        Route::delete('/user-groups/{userGroup}/members/{batId}', [AdminUserGroupController::class, 'removeMember'])->name('user-groups.members.remove');
-
-        // Payments
-        Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
-        Route::get('/payments/{paymentLog}', [AdminPaymentController::class, 'show'])->name('payments.show');
-
-        // Languages
-        Route::get('/languages', [AdminLanguageController::class, 'index'])->name('languages.index');
-        Route::get('/languages/{locale}/translations', [AdminLanguageController::class, 'translations'])->name('languages.translations');
-        Route::post('/languages/translations', [AdminLanguageController::class, 'updateTranslation'])->name('languages.translations.update');
-
-        // Admins
-        Route::resource('admins', AdminAdminController::class)->except(['show']);
-
-        // Settings
-        Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
-        Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
-
-        // Logs
-        Route::get('/logs/activity', [AdminLogController::class, 'activity'])->name('logs.activity');
+        // API section — accessible to all roles including api_user
         Route::get('/logs/api', [AdminLogController::class, 'api'])->name('logs.api');
         Route::post('/logs/api/{apiLog}/replay', [AdminLogController::class, 'replay'])->name('logs.api.replay');
-
-        // API Documentation
         Route::get('/api/documentation', [AdminLogController::class, 'documentation'])->name('api.documentation');
         Route::get('/api/test-token', [AdminLogController::class, 'generateTestToken'])->name('api.test-token');
 
-        // Exports
-        Route::get('/export/{type}', [AdminExportController::class, 'export'])->name('export');
+        // Full access routes — blocked for api_user
+        Route::middleware('admin.full')->group(function () {
+            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+            // Subscribers
+            Route::get('/subscribers', [AdminSubscriberController::class, 'index'])->name('subscribers.index');
+            Route::get('/subscribers/{subscriber}', [AdminSubscriberController::class, 'show'])->name('subscribers.show');
+
+            // Subscription types
+            Route::resource('subscription-types', AdminSubscriptionTypeController::class)->except(['show']);
+            Route::post('/subscription-types/reorder', [AdminSubscriptionTypeController::class, 'reorder'])->name('subscription-types.reorder');
+
+            // Orders
+            Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+            Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+            Route::post('/orders/{order}/replay-notification', [AdminOrderController::class, 'replayNotification'])->name('orders.replay');
+            Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+
+            // Promo codes
+            Route::resource('promo-codes', AdminPromoCodeController::class)->except(['show']);
+
+            // User groups
+            Route::resource('user-groups', AdminUserGroupController::class);
+            Route::post('/user-groups/{userGroup}/members', [AdminUserGroupController::class, 'addMember'])->name('user-groups.members.add');
+            Route::delete('/user-groups/{userGroup}/members/{batId}', [AdminUserGroupController::class, 'removeMember'])->name('user-groups.members.remove');
+
+            // Payments
+            Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+            Route::get('/payments/{paymentLog}', [AdminPaymentController::class, 'show'])->name('payments.show');
+
+            // Languages
+            Route::get('/languages', [AdminLanguageController::class, 'index'])->name('languages.index');
+            Route::get('/languages/{locale}/translations', [AdminLanguageController::class, 'translations'])->name('languages.translations');
+            Route::post('/languages/translations', [AdminLanguageController::class, 'updateTranslation'])->name('languages.translations.update');
+
+            // Admins
+            Route::resource('admins', AdminAdminController::class)->except(['show']);
+
+            // Settings
+            Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+            Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+
+            // Logs
+            Route::get('/logs/activity', [AdminLogController::class, 'activity'])->name('logs.activity');
+
+            // Exports
+            Route::get('/export/{type}', [AdminExportController::class, 'export'])->name('export');
+        });
     });
 });

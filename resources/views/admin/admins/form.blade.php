@@ -16,6 +16,7 @@
                 <select name="role" class="w-full rounded-lg border-gray-300 text-sm">
                     <option value="admin" {{ old('role', $admin?->role) === 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="super_admin" {{ old('role', $admin?->role) === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                    <option value="api_user" {{ old('role', $admin?->role) === 'api_user' ? 'selected' : '' }}>API User</option>
                 </select>
             </div>
             <div><label class="mb-1 block text-sm font-medium text-gray-700">Mot de passe {{ $admin ? '(laisser vide pour garder)' : '' }}</label><input type="password" name="password" {{ $admin ? '' : 'required' }} class="w-full rounded-lg border-gray-300 text-sm"></div>

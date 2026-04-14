@@ -31,6 +31,11 @@ class Admin extends Authenticatable
         return $this->role === 'super_admin';
     }
 
+    public function isApiUser(): bool
+    {
+        return $this->role === 'api_user';
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';
