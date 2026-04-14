@@ -38,23 +38,23 @@
         <div class="mx-auto max-w-2xl px-6">
 
             {{-- Suisse --}}
-            <div class="flex items-center justify-center gap-3">
-                <svg style="width:28px;height:28px;flex-shrink:0;" viewBox="0 0 32 32" fill="none">
+            <div class="flex flex-col items-center text-center">
+                <svg style="width:36px;height:36px;" viewBox="0 0 32 32" fill="none">
                     <path d="M16 1L3 6v9c0 8.5 5.5 16.4 13 18 7.5-1.6 13-9.5 13-18V6L16 1z" fill="#D52B1E"/>
                     <rect x="13.5" y="8" width="5" height="16" rx="1" fill="white"/>
                     <rect x="8" y="13.5" width="16" height="5" rx="1" fill="white"/>
                 </svg>
-                <p class="text-xs leading-snug text-gray-500">{{ __('Développement, serveurs et stockage de données entièrement sécurisés en Suisse') }} <strong class="text-gray-700">(100% CH)</strong></p>
+                <p class="mt-3 text-sm leading-relaxed text-gray-500">{{ __('Développement, serveurs et stockage de données') }}<br>{{ __('entièrement sécurisés en Suisse') }} <strong class="text-gray-700">(100% CH)</strong></p>
             </div>
 
             {{-- Liens + copyright --}}
-            <div class="mt-6 flex flex-col items-center gap-3">
-                <div class="flex items-center gap-4 text-xs text-gray-400">
+            <div class="mt-8 flex flex-col items-center gap-3">
+                <div class="flex items-center gap-5 text-sm text-gray-400">
                     <a href="https://bat-id.ch/terms" target="_blank" class="transition hover:text-batid-bleu">{{ __('Conditions générales') }}</a>
                     <span>·</span>
                     <a href="https://bat-id.ch/privacy" target="_blank" class="transition hover:text-batid-bleu">{{ __('Protection des données') }}</a>
                 </div>
-                <p class="text-[11px] text-gray-300">&copy; {{ date('Y') }} bat-id.ch</p>
+                <p class="text-xs text-gray-300">&copy; {{ date('Y') }} bat-id.ch</p>
             </div>
 
         </div>
