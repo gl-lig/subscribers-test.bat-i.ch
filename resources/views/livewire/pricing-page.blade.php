@@ -15,7 +15,7 @@
                     class="relative flex-1 rounded-lg py-2.5 text-sm font-semibold transition {{ $selectedDuration === $d ? 'bg-batid-marine text-white shadow' : 'text-gray-600 hover:text-batid-marine' }}">
                 {{ __("$d mois") }}
                 @if(($maxDiscounts[$d] ?? 0) > 0)
-                <span class="absolute -right-2 -top-3.5 rounded-full bg-batid-vert px-2 py-1 text-[11px] font-bold leading-none text-batid-marine shadow">-{{ $maxDiscounts[$d] }}%</span>
+                <sup class="ml-0.5 inline-block rounded-full bg-batid-vert px-1.5 py-0.5 text-[9px] font-bold leading-none text-batid-marine" style="vertical-align:super;">-{{ $maxDiscounts[$d] }}%</sup>
                 @endif
             </button>
             @endforeach
