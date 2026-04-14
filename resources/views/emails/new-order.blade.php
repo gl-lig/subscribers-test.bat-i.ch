@@ -9,7 +9,7 @@
         <table width="100%" cellpadding="8" cellspacing="0" style="font-size:14px;">
             <tr><td style="color:#666;border-bottom:1px solid #eee;">N° Commande</td><td style="border-bottom:1px solid #eee;font-weight:bold;">{{ $order->order_number }}</td></tr>
             <tr><td style="color:#666;border-bottom:1px solid #eee;">bat-ID</td><td style="border-bottom:1px solid #eee;">{{ $order->subscriber->bat_id ?? '-' }}</td></tr>
-            <tr><td style="color:#666;border-bottom:1px solid #eee;">Type</td><td style="border-bottom:1px solid #eee;">{{ $order->subscriptionType->translation('fr')?->name ?? '-' }}</td></tr>
+            <tr><td style="color:#666;border-bottom:1px solid #eee;">Type</td><td style="border-bottom:1px solid #eee;">{{ $order->subscriptionType?->translation('fr')?->name ?? '-' }}</td></tr>
             <tr><td style="color:#666;border-bottom:1px solid #eee;">Durée</td><td style="border-bottom:1px solid #eee;">{{ $order->duration_months }} mois</td></tr>
             <tr><td style="color:#666;border-bottom:1px solid #eee;">Montant</td><td style="border-bottom:1px solid #eee;font-weight:bold;color:#00004D;">CHF {{ $order->price_paid }}</td></tr>
             <tr><td style="color:#666;border-bottom:1px solid #eee;">Moyen de paiement</td><td style="border-bottom:1px solid #eee;">{{ ucfirst($order->payment_method ?? '-') }}</td></tr>

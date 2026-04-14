@@ -13,7 +13,7 @@
         <p class="mb-8 text-center text-lg text-white/70">{{ __('Votre abonnement est maintenant actif') }}</p>
 
         @if($order)
-        @php $trans = $order->subscriptionType->translation($locale); @endphp
+        @php $trans = $order->subscriptionType?->translation($locale); @endphp
         <div class="rounded-2xl bg-white p-8 shadow-2xl">
             <h2 class="mb-6 text-lg font-bold text-batid-marine">{{ __('Détails de votre abonnement') }}</h2>
             <dl class="space-y-3 text-sm">

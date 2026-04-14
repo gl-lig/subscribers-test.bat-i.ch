@@ -19,7 +19,7 @@
                 @else<span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">Remplacé</span>@endif
             </dd></div>
             <div class="flex justify-between"><dt class="text-gray-500">bat-ID</dt><dd class="font-medium">{{ $order->subscriber->bat_id ?? '-' }}</dd></div>
-            <div class="flex justify-between"><dt class="text-gray-500">Type</dt><dd>{{ $order->subscriptionType->translation('fr')?->name ?? '-' }}</dd></div>
+            <div class="flex justify-between"><dt class="text-gray-500">Type</dt><dd>{{ $order->subscriptionType?->translation('fr')?->name ?? '-' }}</dd></div>
             <div class="flex justify-between"><dt class="text-gray-500">Durée</dt><dd>{{ $order->duration_months }} mois</dd></div>
             <div class="flex justify-between"><dt class="text-gray-500">Début</dt><dd>{{ $order->starts_at->format('d.m.Y') }}</dd></div>
             <div class="flex justify-between"><dt class="text-gray-500">Fin</dt><dd>{{ $order->expires_at->format('d.m.Y') }}</dd></div>
