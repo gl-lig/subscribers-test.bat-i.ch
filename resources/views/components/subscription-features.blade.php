@@ -2,34 +2,36 @@
 
 @php
     $s = $compact ? 'text-xs' : 'text-sm';
-    $ico = $compact ? 'text-[11px]' : 'text-xs';
-    $sp = $compact ? 'space-y-1.5' : 'space-y-2.5';
-    $logoH = $compact ? 'h-4 w-4' : 'h-[18px] w-[18px]';
+    $ico = $compact ? 'text-sm' : 'text-base';
+    $sp = $compact ? 'space-y-2' : 'space-y-3';
+    $logoH = $compact ? 'h-4 w-4' : 'h-5 w-5';
+    $icoColor = 'text-batid-marine/40';
+    $icoOff = 'text-gray-300';
 @endphp
 
 <ul class="{{ $sp }}">
-    <li class="flex items-center gap-2.5 {{ $s }}">
-        <i class="fa-regular fa-map {{ $ico }} w-4 text-center text-gray-400"></i>
-        <span>{{ __('Parcelles') }}: <strong>{{ $type->parcelles_unlimited ? '∞' : $type->parcelles_count }}</strong></span>
+    <li class="flex items-center gap-3 {{ $s }}">
+        <i class="fa-solid fa-map {{ $ico }} w-5 text-center {{ $icoColor }}"></i>
+        <span>{{ __('Parcelles') }} <strong class="text-batid-marine">{{ $type->parcelles_unlimited ? __('Illimité') : $type->parcelles_count }}</strong></span>
     </li>
 
-    <li class="flex items-center gap-2.5 {{ $s }}">
-        <i class="fa-regular fa-bell {{ $ico }} w-4 text-center text-gray-400"></i>
-        <span>{{ __('Alertes') }}: <strong>{{ $type->alertes_count }}</strong></span>
+    <li class="flex items-center gap-3 {{ $s }}">
+        <i class="fa-solid fa-bell {{ $ico }} w-5 text-center {{ $icoColor }}"></i>
+        <span>{{ __('Alertes') }} <strong class="text-batid-marine">{{ $type->alertes_count }}</strong></span>
     </li>
 
-    <li class="flex items-center gap-2.5 {{ $s }}">
-        <i class="fa-regular fa-hard-drive {{ $ico }} w-4 text-center text-gray-400"></i>
-        <span>{{ __('Stockage') }}: <strong>{{ $type->stockage_unlimited ? '∞' : $type->stockage_go . ' Go' }}</strong></span>
+    <li class="flex items-center gap-3 {{ $s }}">
+        <i class="fa-solid fa-hard-drive {{ $ico }} w-5 text-center {{ $icoColor }}"></i>
+        <span>{{ __('Stockage') }} <strong class="text-batid-marine">{{ $type->stockage_unlimited ? __('Illimité') : $type->stockage_go . ' Go' }}</strong></span>
     </li>
 
     <li class="{{ $s }}">
-        <div class="flex items-center gap-2.5">
-            <i class="fa-regular fa-folder-open {{ $ico }} w-4 text-center {{ $type->cloud_externe ? 'text-gray-400' : 'text-gray-300' }}"></i>
+        <div class="flex items-center gap-3 {{ $s }}">
+            <i class="fa-solid fa-cloud {{ $ico }} w-5 text-center {{ $type->cloud_externe ? $icoColor : $icoOff }}"></i>
             <span class="{{ $type->cloud_externe ? '' : 'text-gray-400' }}">{{ __('Cloud externe') }}</span>
         </div>
         @if($type->cloud_externe)
-        <div class="ml-[26px] mt-1.5 flex items-center gap-2.5">
+        <div class="ml-8 mt-2 flex items-center gap-3">
             {{-- kDrive (Infomaniak) --}}
             <img src="https://www.infomaniak.com/favicon.ico" alt="kDrive" class="{{ $logoH }} rounded-sm object-contain" title="kDrive">
             {{-- Google Drive --}}
@@ -61,19 +63,19 @@
         @endif
     </li>
 
-    <li class="flex items-center gap-2.5 {{ $s }}">
-        <i class="fa-solid fa-shield-halved {{ $ico }} w-4 text-center {{ $type->lot_sauvegarde ? 'text-gray-400' : 'text-gray-300' }}"></i>
+    <li class="flex items-center gap-3 {{ $s }}">
+        <i class="fa-solid fa-shield-halved {{ $ico }} w-5 text-center {{ $type->lot_sauvegarde ? $icoColor : $icoOff }}"></i>
         <span class="{{ $type->lot_sauvegarde ? '' : 'text-gray-400' }}">{{ __('Lot de sauvegarde') }}</span>
     </li>
 
     @if($type->workspace_enabled)
-    <li class="flex items-center gap-2.5 {{ $s }}">
-        <i class="fa-regular fa-user-group {{ $ico }} w-4 text-center text-gray-400"></i>
-        <span>{{ __('Workspace') }}: <strong>{{ $type->workspace_unlimited ? '∞' : $type->workspace_count }}</strong></span>
+    <li class="flex items-center gap-3 {{ $s }}">
+        <i class="fa-solid fa-users {{ $ico }} w-5 text-center {{ $icoColor }}"></i>
+        <span>{{ __('Workspace') }} <strong class="text-batid-marine">{{ $type->workspace_unlimited ? __('Illimité') : $type->workspace_count }}</strong></span>
     </li>
     @else
-    <li class="flex items-center gap-2.5 {{ $s }}">
-        <i class="fa-regular fa-user-group {{ $ico }} w-4 text-center text-gray-300"></i>
+    <li class="flex items-center gap-3 {{ $s }}">
+        <i class="fa-solid fa-users {{ $ico }} w-5 text-center {{ $icoOff }}"></i>
         <span class="text-gray-400">{{ __('Workspace') }}</span>
     </li>
     @endif
