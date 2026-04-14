@@ -45,6 +45,13 @@
     </li>
     @endif
 
+    @if($type->veille_robotisee)
+    <li class="flex items-center gap-3 {{ $s }}">
+        <i class="fa-solid fa-robot {{ $ico }} w-5 text-center {{ $icoColor }}"></i>
+        <span>{{ __('Veille robotisée') }}</span>
+    </li>
+    @endif
+
     @if($type->lot_sauvegarde)
     <li class="flex items-center gap-3 {{ $s }}">
         <i class="fa-solid fa-shield-halved {{ $ico }} w-5 text-center {{ $icoColor }}"></i>
