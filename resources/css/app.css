@@ -109,21 +109,21 @@ body, button, input, select, textarea {
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #00004D;
+  color: #0051FF;
   margin-bottom: 18px;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 .fe-eyebrow__line {
   display: block;
   width: 24px; height: 1px;
-  background: #00004D;
-  opacity: 0.3;
+  background: #0051FF;
+  opacity: 0.4;
 }
 
 .fe-title {
   font-size: clamp(22px, 3.5vw, 34px);
   font-weight: 600;
-  color: #00004D;
+  color: #0051FF;
   line-height: 1.25;
   margin-bottom: 14px;
 }
@@ -131,7 +131,7 @@ body, button, input, select, textarea {
 .fe-subtitle {
   font-size: 15px;
   font-weight: 400;
-  color: rgba(0,0,77,0.65);
+  color: rgba(0,81,255,0.65);
   max-width: 480px;
   margin: 0 auto;
   line-height: 1.75;
@@ -151,19 +151,19 @@ body, button, input, select, textarea {
   align-items: center;
   gap: 7px;
   padding: 9px 18px 9px 14px;
-  background: rgba(0,0,77,0.08);
-  border: 1px solid rgba(0,0,77,0.18);
+  background: rgba(0,81,255,0.08);
+  border: 1px solid rgba(0,81,255,0.18);
   border-radius: 9999px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 400;
-  color: #00004D;
+  color: #0051FF;
   transition: all 0.18s ease;
   user-select: none;
 }
 .fe-pill:hover {
-  border-color: rgba(0,0,77,0.35);
-  background: rgba(0,0,77,0.12);
+  border-color: rgba(0,81,255,0.40);
+  background: rgba(0,81,255,0.14);
 }
 .fe-pill--active {
   border-color: #0050FF !important;
@@ -173,7 +173,7 @@ body, button, input, select, textarea {
 }
 .fe-pill--active svg * { stroke: #ffffff !important; }
 
-.fe-pill__icon { width: 15px; height: 15px; display: flex; flex-shrink: 0; opacity: 0.6; }
+.fe-pill__icon { width: 15px; height: 15px; display: flex; flex-shrink: 0; opacity: 0.65; }
 .fe-pill--active .fe-pill__icon { opacity: 1; }
 
 /* Panel animations (Alpine x-transition) */
@@ -280,6 +280,6 @@ body, button, input, select, textarea {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   margin-top: 60px;
   font-size: 12px; font-weight: 400;
-  color: rgba(0,0,77,0.45); letter-spacing: 0.04em;
+  color: rgba(0,81,255,0.50); letter-spacing: 0.04em;
 }
-.fe-badge svg { width: 13px; height: 13px; color: #00004D; opacity: 0.4; }
+.fe-badge svg { width: 13px; height: 13px; color: #0051FF; opacity: 0.45; }
