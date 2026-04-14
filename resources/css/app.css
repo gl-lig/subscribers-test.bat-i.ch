@@ -69,3 +69,206 @@
 .iti input {
     padding-left: 90px !important;
 }
+
+[x-cloak] { display: none !important; }
+
+/* ════════════════════════════════════════
+   FEATURES EXPLAINER SECTION
+   ════════════════════════════════════════ */
+
+.fe-section {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 80px 24px 100px;
+}
+
+/* Intro */
+.fe-intro { text-align: center; margin-bottom: 52px; }
+
+.fe-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #3DFF9E;
+  margin-bottom: 18px;
+}
+.fe-eyebrow__line {
+  display: block;
+  width: 24px; height: 1px;
+  background: #3DFF9E;
+  opacity: 0.4;
+}
+
+.fe-title {
+  font-size: clamp(22px, 3.5vw, 34px);
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+
+.fe-subtitle {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.80);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+/* Pills nav */
+.fe-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
+.fe-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px 9px 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 9999px;
+  cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.80);
+  transition: all 0.18s ease;
+  user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.fe-pill:hover {
+  border-color: rgba(255,255,255,0.42);
+  color: #ffffff;
+  background: rgba(255,255,255,0.10);
+}
+.fe-pill--active {
+  border-color: #3DFF9E !important;
+  color: #00004D !important;
+  background: #3DFF9E !important;
+  font-weight: 500;
+}
+.fe-pill--active svg * { stroke: #00004D !important; }
+
+.fe-pill__icon { width: 15px; height: 15px; display: flex; flex-shrink: 0; opacity: 0.75; }
+.fe-pill--active .fe-pill__icon { opacity: 1; }
+
+/* Panel animations (Alpine x-transition) */
+.fe-enter        { transition: opacity 0.32s ease, transform 0.32s ease; }
+.fe-enter-start  { opacity: 0; transform: translateY(12px); }
+.fe-enter-end    { opacity: 1; transform: translateY(0); }
+.fe-leave        { transition: opacity 0.20s ease; }
+
+/* Card */
+.fe-card {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  background: rgba(0,0,55,0.58);
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  margin-bottom: 8px;
+}
+
+@media (max-width: 680px) {
+  .fe-card { grid-template-columns: 1fr; }
+}
+
+/* Pitch (gauche) */
+.fe-pitch {
+  padding: 44px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid rgba(255,255,255,0.10);
+}
+@media (max-width: 680px) {
+  .fe-pitch { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.10); padding: 32px 24px; }
+}
+
+.fe-pitch__icon {
+  width: 52px; height: 52px;
+  background: rgba(61,255,158,0.14);
+  border: 1px solid rgba(61,255,158,0.35);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22px;
+  color: #3DFF9E;
+}
+.fe-pitch__icon svg { width: 24px; height: 24px; }
+
+.fe-pitch__title {
+  font-size: 20px; font-weight: 600;
+  color: #ffffff; line-height: 1.35;
+  margin-bottom: 14px;
+}
+
+.fe-pitch__text {
+  font-size: 14px; font-weight: 300;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.80);
+}
+
+/* Plans (droite) */
+.fe-plans {
+  padding: 36px 28px;
+  display: flex; flex-direction: column;
+  justify-content: center; gap: 18px;
+  background: rgba(0,0,30,0.25);
+}
+@media (max-width: 680px) { .fe-plans { padding: 24px; } }
+
+.fe-plans__label {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.20em; text-transform: uppercase;
+  color: rgba(255,255,255,0.50);
+}
+
+.fe-plans__rows { display: flex; flex-direction: column; gap: 8px; }
+
+.fe-plan-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+}
+.fe-plan-row--featured {
+  border-color: #0050FF;
+  background: rgba(0,80,255,0.22);
+}
+
+.fe-plan-row__name { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.50); }
+.fe-plan-row--featured .fe-plan-row__name { color: rgba(255,255,255,0.80); }
+
+.fe-plan-row__val {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 13px; font-weight: 600;
+  color: #ffffff;
+}
+.fe-plan-row--featured .fe-plan-row__val { color: #3DFF9E; }
+.fe-plan-row__val svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.fe-ico-check { color: #3DFF9E; }
+.fe-ico-dash  { color: rgba(255,255,255,0.20); }
+
+/* Badge Suisse */
+.fe-badge {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 60px;
+  font-size: 12px; font-weight: 400;
+  color: rgba(255,255,255,0.50); letter-spacing: 0.04em;
+}
+.fe-badge svg { width: 13px; height: 13px; color: #3DFF9E; opacity: 0.6; }
