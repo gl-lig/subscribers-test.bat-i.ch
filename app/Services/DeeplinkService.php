@@ -28,6 +28,26 @@ class DeeplinkService
             'ts' => time(),
         ]);
 
+        return $this->sign($payload);
+    }
+
+    /**
+     * Generate a register token (for subscriber creation).
+     */
+    public function generateRegisterToken(string $phone, string $batId): string
+    {
+        $payload = json_encode([
+            'a' => 'register',
+            'p' => $phone,
+            'b' => $batId,
+            'ts' => time(),
+        ]);
+
+        return $this->sign($payload);
+    }
+
+    private function sign(string $payload): string
+    {
         $encoded = rtrim(strtr(base64_encode($payload), '+/', '-_'), '=');
         $signature = hash_hmac('sha256', $encoded, $this->secret);
 
@@ -79,6 +99,53 @@ class DeeplinkService
             'bat_id' => $data['b'],
             'type_id' => (int) $data['t'],
             'duration' => (int) ($data['d'] ?? 12),
+        ];
+    }
+
+    /**
+     * Validate and decode a register token.
+     *
+     * @return array{phone: string, bat_id: string}|null
+     */
+    public function validateRegisterToken(string $token): ?array
+    {
+        if (empty($this->secret)) {
+            Log::warning('DeeplinkService: DEEPLINK_SECRET is not configured');
+            return null;
+        }
+
+        $parts = explode('.', $token);
+        if (count($parts) !== 2) {
+            return null;
+        }
+
+        [$encoded, $signature] = $parts;
+
+        $expectedSignature = hash_hmac('sha256', $encoded, $this->secret);
+        if (! hash_equals($expectedSignature, $signature)) {
+            Log::warning('DeeplinkService: invalid register signature');
+            return null;
+        }
+
+        $json = base64_decode(strtr($encoded, '-_', '+/'));
+        $data = json_decode($json, true);
+
+        if (! $data || ! isset($data['a'], $data['p'], $data['b'], $data['ts'])) {
+            return null;
+        }
+
+        if ($data['a'] !== 'register') {
+            return null;
+        }
+
+        if ((time() - $data['ts']) > $this->ttl) {
+            Log::info('DeeplinkService: register token expired', ['age' => time() - $data['ts']]);
+            return null;
+        }
+
+        return [
+            'phone' => $data['p'],
+            'bat_id' => $data['b'],
         ];
     }
 }

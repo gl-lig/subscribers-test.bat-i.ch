@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscriber;
+use App\Services\AdminLogService;
 use Illuminate\Http\Request;
 
 class AdminSubscriberController extends Controller
@@ -31,5 +32,22 @@ class AdminSubscriberController extends Controller
         ]);
 
         return view('admin.subscribers.show', compact('subscriber'));
+    }
+
+    public function destroy(Subscriber $subscriber)
+    {
+        $data = ['bat_id' => $subscriber->bat_id, 'phone' => $subscriber->phone];
+
+        // Delete related data
+        foreach ($subscriber->orders as $order) {
+            $order->metadata()->delete();
+            $order->paymentLogs()->delete();
+        }
+        $subscriber->orders()->delete();
+        $subscriber->delete();
+
+        AdminLogService::log('delete', 'subscribers', $data);
+
+        return redirect()->route('admin.subscribers.index')->with('success', "Abonné {$data['bat_id']} supprimé.");
     }
 }

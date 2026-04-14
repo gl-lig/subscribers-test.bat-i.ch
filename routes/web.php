@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiRegisterController;
 use App\Http\Controllers\DatatransWebhookController;
 use App\Http\Controllers\DeeplinkController;
 use App\Http\Controllers\InvoiceController;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::get('/', PricingPage::class)->name('home');
 Route::get('/deeplink', [DeeplinkController::class, 'handle'])->name('deeplink');
+Route::get('/api/register', [ApiRegisterController::class, 'handle'])->name('api.register');
 Route::get('/cart', Cart::class)->name('cart');
 Route::get('/confirmation', PaymentConfirmation::class)->name('confirmation');
 Route::get('/payment-failed', PaymentFailed::class)->name('payment.failed');

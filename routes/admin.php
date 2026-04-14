@@ -37,6 +37,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logs/api/{apiLog}/replay', [AdminLogController::class, 'replay'])->name('logs.api.replay');
         Route::get('/api/documentation', [AdminLogController::class, 'documentation'])->name('api.documentation');
         Route::get('/api/test-token', [AdminLogController::class, 'generateTestToken'])->name('api.test-token');
+        Route::get('/api/test-register-token', [AdminLogController::class, 'generateTestRegisterToken'])->name('api.test-register-token');
 
         // Full access routes — blocked for api_user
         Route::middleware('admin.full')->group(function () {
@@ -45,6 +46,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             // Subscribers
             Route::get('/subscribers', [AdminSubscriberController::class, 'index'])->name('subscribers.index');
             Route::get('/subscribers/{subscriber}', [AdminSubscriberController::class, 'show'])->name('subscribers.show');
+            Route::delete('/subscribers/{subscriber}', [AdminSubscriberController::class, 'destroy'])->name('subscribers.destroy');
 
             // Subscription types
             Route::resource('subscription-types', AdminSubscriptionTypeController::class)->except(['show']);
