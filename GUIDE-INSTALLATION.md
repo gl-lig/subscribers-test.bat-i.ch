@@ -2,10 +2,15 @@
 
 ## Ce que Claude Code gère (aucune intervention de Greg)
 
+- Création de la base de données MySQL sur le VPS
+- Configuration de la connexion DB dans le projet
 - Installation du projet sur le VPS Infomaniak via Coolify
-- Configuration base de données, SSL, cron, queue worker
+- Certificat SSL (Let's Encrypt)
 - Build frontend (npm run build)
-- Seeders et migrations
+- Migrations et seeders (données de test)
+- Cron job (tâches planifiées)
+- Queue worker (jobs asynchrones)
+- Configuration SMTP
 
 ---
 
