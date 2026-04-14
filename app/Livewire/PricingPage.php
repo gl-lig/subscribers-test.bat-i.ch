@@ -39,7 +39,14 @@ class PricingPage extends Component
         $types = SubscriptionType::online()->ordered()->with('translations')->get();
         $locale = app()->getLocale();
 
-        return view('livewire.pricing-page', compact('types', 'locale'))
+        // Max discount per duration for badge on selector
+        $maxDiscounts = [];
+        foreach ([12, 24, 36] as $d) {
+            $max = $types->max(fn ($t) => $t->discountForDuration($d));
+            $maxDiscounts[$d] = $max > 0 ? intval($max) : 0;
+        }
+
+        return view('livewire.pricing-page', compact('types', 'locale', 'maxDiscounts'))
             ->layout('layouts.app');
     }
 }
