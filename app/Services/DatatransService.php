@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\Log;
 class DatatransService implements DatatransServiceInterface
 {
     private string $apiUrl;
+    private string $payUrl;
     private string $merchantId;
     private string $apiPassword;
 
     public function __construct()
     {
         $this->apiUrl = config('datatrans.api_url');
+        $this->payUrl = config('datatrans.pay_url');
         $this->merchantId = config('datatrans.merchant_id');
         $this->apiPassword = config('datatrans.api_password');
     }
@@ -61,7 +63,7 @@ class DatatransService implements DatatransServiceInterface
                 return [
                     'success' => true,
                     'transactionId' => $data['transactionId'] ?? null,
-                    'redirectUrl' => "{$this->apiUrl}/v1/start/{$data['transactionId']}",
+                    'redirectUrl' => "{$this->payUrl}/v1/start/{$data['transactionId']}",
                 ];
             }
 

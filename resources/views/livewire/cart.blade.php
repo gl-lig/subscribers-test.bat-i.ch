@@ -27,7 +27,7 @@
             <label class="mb-2 block text-sm font-medium text-gray-700">{{ __('Durée') }}</label>
             <div class="flex gap-2">
                 @foreach([12, 24, 36] as $d)
-                <button wire:click="changeDuration({{ $d }})"
+                <button wire:key="cart-dur-{{ $d }}" wire:click="changeDuration({{ $d }})"
                         class="flex-1 rounded-lg py-2.5 text-sm font-semibold transition {{ $duration === $d ? 'bg-batid-marine text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
                     {{ $d }} {{ __('mois') }}
                 </button>
@@ -79,7 +79,7 @@
     <!-- CGV + Pay -->
     <div class="space-y-4">
         <label class="flex items-start gap-3">
-            <input type="checkbox" wire:model="cgvAccepted" class="mt-0.5 rounded border-gray-300 text-batid-bleu">
+            <input type="checkbox" wire:model.live="cgvAccepted" class="mt-0.5 rounded border-gray-300 text-batid-bleu">
             <span class="text-sm text-gray-600">{!! __("J'ai lu et j'accepte les Conditions Générales de Vente de bat-id.ch") !!}
                 <a href="https://bat-id.ch/terms" target="_blank" class="text-batid-bleu hover:underline">{{ __('Conditions Générales de Vente') }}</a>
             </span>
