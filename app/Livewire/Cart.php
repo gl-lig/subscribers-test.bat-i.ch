@@ -189,7 +189,15 @@ class Cart extends Component
         $type = SubscriptionType::with('translations')->find($this->typeId);
         $locale = app()->getLocale();
 
-        return view('livewire.cart', compact('type', 'locale'))
+        $discounts = [];
+        if ($type) {
+            foreach ([12, 24, 36] as $d) {
+                $disc = $type->discountForDuration($d);
+                $discounts[$d] = $disc > 0 ? intval($disc) : 0;
+            }
+        }
+
+        return view('livewire.cart', compact('type', 'locale', 'discounts'))
             ->layout('layouts.app');
     }
 }

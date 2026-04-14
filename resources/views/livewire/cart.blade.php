@@ -28,8 +28,11 @@
             <div class="flex gap-2">
                 @foreach([12, 24, 36] as $d)
                 <button wire:key="cart-dur-{{ $d }}" wire:click="changeDuration({{ $d }})"
-                        class="flex-1 rounded-lg py-2.5 text-sm font-semibold transition {{ $duration === $d ? 'bg-batid-marine text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
+                        class="relative flex-1 rounded-lg py-2.5 text-sm font-semibold transition {{ $duration === $d ? 'bg-batid-marine text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
                     {{ $d }} {{ __('mois') }}
+                    @if(($discounts[$d] ?? 0) > 0)
+                    <sup class="ml-0.5 inline-block rounded-full px-1.5 py-0.5 text-[9px] font-bold leading-none {{ $duration === $d ? 'bg-white text-batid-marine' : 'bg-batid-vert text-batid-marine' }}" style="vertical-align:super;">-{{ $discounts[$d] }}%</sup>
+                    @endif
                 </button>
                 @endforeach
             </div>
