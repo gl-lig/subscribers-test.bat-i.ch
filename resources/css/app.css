@@ -35,3 +35,19 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+/* intl-tel-input overrides */
+.iti {
+    width: 100%;
+}
+.iti__country-list {
+    z-index: 100;
+    max-height: 250px;
+}
+.iti__selected-dial-code {
+    font-size: 1.125rem;
+    color: #00004D;
+}
+.iti__flag-container {
+    padding-left: 0.5rem;
+}

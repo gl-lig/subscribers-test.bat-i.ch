@@ -12,22 +12,23 @@
         <button wire:click="$set('notFound', false)" class="mt-3 block w-full text-sm text-gray-500 hover:text-batid-bleu">{{ __('Réessayer') }}</button>
     </div>
     @else
-    <div>
+    <div x-data="phoneInput">
         <p class="mb-4 text-sm text-gray-500">{{ __('Entrez votre numéro de téléphone mobile') }}</p>
         <div class="mb-4">
-            <input type="tel" wire:model="phone" inputmode="tel" placeholder="+41 79 xxx xx xx"
-                   class="w-full rounded-xl border-gray-300 px-4 py-3.5 text-lg tracking-wider focus:border-batid-bleu focus:ring-batid-bleu"
-                   wire:keydown.enter="verifyPhone">
+            <input type="tel" x-ref="phoneField" inputmode="tel"
+                   placeholder="79 123 45 67"
+                   class="iti-phone-input w-full rounded-xl border-gray-300 px-4 py-3.5 text-lg tracking-wider focus:border-batid-bleu focus:ring-batid-bleu"
+                   @keydown.enter="submitPhone()">
         </div>
 
         @if($error)
         <p class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">{{ $error }}</p>
         @endif
 
-        <button wire:click="verifyPhone" wire:loading.attr="disabled"
+        <button @click="submitPhone()" wire:loading.attr="disabled"
                 class="w-full rounded-xl bg-batid-marine py-3.5 text-sm font-bold text-batid-vert transition hover:bg-batid-bleu hover:text-white disabled:opacity-50">
-            <span wire:loading.remove>{{ __('Vérifier') }}</span>
-            <span wire:loading class="flex items-center justify-center gap-2">
+            <span wire:loading.remove wire:target="verifyPhone">{{ __('Vérifier') }}</span>
+            <span wire:loading wire:target="verifyPhone" class="flex items-center justify-center gap-2">
                 <span class="spinner"></span> {{ __('Chargement...') }}
             </span>
         </button>

@@ -25,11 +25,13 @@
             @foreach($types as $type)
             @php
                 $trans = $type->translation($locale);
-                $price = $type->priceForDuration($selectedDuration);
-                $annualPrice = $price / ($selectedDuration / 12);
+                $baseAnnual = (float) $type->price_chf;
+                $totalPrice = $type->priceForDuration($selectedDuration);
+                $annualPrice = $totalPrice / ($selectedDuration / 12);
+                $hasDiscount = $selectedDuration === 36 && $type->discount_36_months > 0;
             @endphp
-            <div class="relative flex flex-col rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200 transition hover:shadow-lg hover:ring-batid-bleu/30">
-                @if($selectedDuration === 36 && $type->discount_36_months > 0)
+            <div wire:key="plan-{{ $type->id }}-{{ $selectedDuration }}" class="relative flex flex-col rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200 transition hover:shadow-lg hover:ring-batid-bleu/30">
+                @if($hasDiscount)
                 <div class="absolute -top-3 right-4 rounded-full bg-batid-vert px-3 py-1 text-xs font-bold text-batid-marine">
                     -{{ intval($type->discount_36_months) }}%
                 </div>
@@ -39,12 +41,15 @@
                 <p class="mt-2 text-sm text-gray-500">{{ $trans?->description ?? '' }}</p>
 
                 <div class="mt-6">
-                    <span class="text-4xl font-extrabold text-batid-marine">CHF {{ number_format($annualPrice, 0) }}</span>
+                    <span class="text-4xl font-extrabold text-batid-marine">CHF {{ number_format($annualPrice, 2) }}</span>
                     <span class="text-sm text-gray-500">/ {{ __('par an') }}</span>
                 </div>
 
+                @if($hasDiscount)
+                <p class="mt-1 text-xs text-gray-400 line-through">CHF {{ number_format($baseAnnual, 2) }} / {{ __('par an') }}</p>
+                @endif
                 @if($selectedDuration > 12)
-                <p class="mt-1 text-xs text-gray-400">Total: CHF {{ number_format($price, 2) }} / {{ $selectedDuration }} {{ __('mois') }}</p>
+                <p class="mt-1 text-xs text-gray-400">{{ __('Total') }}: CHF {{ number_format($totalPrice, 2) }} / {{ $selectedDuration }} {{ __('mois') }}</p>
                 @endif
 
                 <ul class="mt-8 flex-1 space-y-3">
