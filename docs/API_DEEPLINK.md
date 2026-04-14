@@ -1,4 +1,4 @@
-# API Deeplink — bat-id Subscribers
+# API — bat-id Subscribers
 
 > Documentation pour le développeur bat-id
 > Dernière mise à jour : 15 avril 2026
@@ -178,6 +178,168 @@ final url = 'https://subscribers-test.apcom.app/deeplink?token=$encoded.$signatu
 
 Un générateur de token de test est disponible dans le back-office admin :
 **Admin > Logs & API > Documentation API > Générateur de test**
+
+---
+
+# API 2 — Inscription (création d'abonné)
+
+## Principe
+
+Le backend bat-id peut créer un abonné dans le système subscribers en appelant une URL signée. Le système vérifie qu'aucun abonné avec le même bat-ID ou le même numéro de téléphone n'existe déjà. La réponse est un JSON structuré.
+
+---
+
+## URL
+
+```
+GET https://subscribers-test.apcom.app/api/register?token={TOKEN}
+```
+
+Production :
+```
+GET https://subscribers.bat-i.ch/api/register?token={TOKEN}
+```
+
+---
+
+## Payload JSON
+
+```json
+{
+  "a": "register",       // Action (obligatoire, valeur fixe)
+  "p": "+41791234567",   // Numéro de téléphone (format international)
+  "b": "@iGgUwLLc",     // Identifiant bat-id de l'utilisateur
+  "ts": 1713200000       // Timestamp Unix en secondes
+}
+```
+
+Le champ `"a": "register"` distingue ce token d'un token deeplink. Un token deeplink ne peut pas être utilisé pour inscrire un abonné et vice-versa.
+
+L'algorithme de signature est identique au deeplink (base64url + HMAC-SHA256 avec la même clé secrète).
+
+---
+
+## Exemples
+
+### PHP
+
+```php
+$secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
+
+$payload = json_encode([
+    'a' => 'register',
+    'p' => '+41791234567',
+    'b' => '@iGgUwLLc',
+    'ts' => time(),
+]);
+
+$encoded = rtrim(strtr(base64_encode($payload), '+/', '-_'), '=');
+$signature = hash_hmac('sha256', $encoded, $secret);
+$token = $encoded . '.' . $signature;
+
+$response = file_get_contents('https://subscribers-test.apcom.app/api/register?token=' . $token);
+$result = json_decode($response, true);
+```
+
+### JavaScript / Node.js
+
+```javascript
+const crypto = require('crypto');
+
+const secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
+
+const payload = JSON.stringify({
+  a: 'register',
+  p: '+41791234567',
+  b: '@iGgUwLLc',
+  ts: Math.floor(Date.now() / 1000)
+});
+
+const encoded = Buffer.from(payload)
+  .toString('base64')
+  .replace(/\+/g, '-')
+  .replace(/\//g, '_')
+  .replace(/=+$/, '');
+
+const signature = crypto
+  .createHmac('sha256', secret)
+  .update(encoded)
+  .digest('hex');
+
+const url = `https://subscribers-test.apcom.app/api/register?token=${encoded}.${signature}`;
+const res = await fetch(url);
+const result = await res.json();
+```
+
+---
+
+## Réponses JSON
+
+### Succès — HTTP 201
+
+```json
+{
+  "status": "success",
+  "message": "Abonné créé avec succès.",
+  "subscriber": {
+    "id": 42,
+    "bat_id": "@iGgUwLLc",
+    "phone": "+41791234567",
+    "created_at": "2026-04-15T14:30:00+02:00"
+  }
+}
+```
+
+### Conflit bat-ID — HTTP 409
+
+```json
+{
+  "status": "error",
+  "code": "bat_id_exists",
+  "message": "Un abonné avec ce bat-ID existe déjà.",
+  "bat_id": "@iGgUwLLc"
+}
+```
+
+### Conflit téléphone — HTTP 409
+
+```json
+{
+  "status": "error",
+  "code": "phone_exists",
+  "message": "Un abonné avec ce numéro de téléphone existe déjà.",
+  "phone": "+41791234567"
+}
+```
+
+### Token invalide — HTTP 401
+
+```json
+{
+  "status": "error",
+  "code": "invalid_token",
+  "message": "Token invalide, expiré ou signature incorrecte."
+}
+```
+
+### Token manquant — HTTP 400
+
+```json
+{
+  "status": "error",
+  "code": "missing_token",
+  "message": "Le paramètre token est requis."
+}
+```
+
+---
+
+## Sécurité
+
+- Même clé secrète et même algorithme que le deeplink
+- Le champ `"a": "register"` empêche la réutilisation d'un token deeplink
+- Vérification des doublons sur bat-ID ET téléphone (y compris les abonnés supprimés)
+- Token à usage unique implicite : le deuxième appel échouera avec `bat_id_exists`
 
 ---
 

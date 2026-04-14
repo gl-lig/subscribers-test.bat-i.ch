@@ -41,8 +41,12 @@
                     @endif
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-500">{{ $subscriber->created_at->format('d.m.Y') }}</td>
-                <td class="px-6 py-4 text-right">
+                <td class="px-6 py-4 text-right flex items-center justify-end gap-3">
                     <a href="{{ route('admin.subscribers.show', $subscriber) }}" class="text-sm font-medium text-batid-bleu hover:underline">Voir</a>
+                    <form method="POST" action="{{ route('admin.subscribers.destroy', $subscriber) }}" onsubmit="return confirm('Supprimer {{ $subscriber->bat_id }} et toutes ses commandes ?')" class="inline">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="text-sm text-red-600 hover:underline">Supprimer</button>
+                    </form>
                 </td>
             </tr>
             @empty

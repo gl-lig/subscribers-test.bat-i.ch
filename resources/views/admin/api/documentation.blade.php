@@ -1,8 +1,14 @@
 @extends('layouts.admin')
 @section('content')
 <div class="mx-auto max-w-4xl">
-    <h1 class="mb-2 text-2xl font-bold text-batid-marine">Documentation API — Deeplink</h1>
+    <h1 class="mb-2 text-2xl font-bold text-batid-marine">Documentation API</h1>
     <p class="mb-6 text-sm text-gray-500">Documentation technique pour l'integration depuis l'application mobile bat-id</p>
+
+    {{-- Navigation --}}
+    <div class="mb-6 flex gap-2">
+        <a href="#deeplink" class="rounded-lg bg-batid-bleu px-4 py-2 text-sm text-white hover:bg-batid-marine">1. Deeplink</a>
+        <a href="#register" class="rounded-lg bg-batid-bleu px-4 py-2 text-sm text-white hover:bg-batid-marine">2. Inscription</a>
+    </div>
 
     {{-- Status --}}
     <div class="mb-6 rounded-xl p-4 {{ $secretConfigured ? 'bg-green-50 ring-1 ring-green-200' : 'bg-red-50 ring-1 ring-red-200' }}">
@@ -15,6 +21,11 @@
                 <span class="text-sm font-medium text-red-800">DEEPLINK_SECRET non configure dans .env — deeplink inactif</span>
             @endif
         </div>
+    </div>
+
+    {{-- === API 1 : DEEPLINK === --}}
+    <div id="deeplink" class="mb-8 border-b border-gray-200 pb-2">
+        <h2 class="text-xl font-bold text-batid-marine">API 1 — Deeplink (acces direct au panier)</h2>
     </div>
 
     {{-- Principe --}}
@@ -243,6 +254,209 @@ final url = '{{ $baseUrl }}/deeplink?token=$encoded.$signature';</pre>
             <li>Le bat-ID et le telephone proviennent du token signe — aucun appel API intermediaire</li>
             <li>La cle secrete doit etre transmise de maniere securisee et ne jamais etre exposee cote client</li>
             <li>Le token doit etre genere cote serveur (backend bat-id), jamais dans l'application mobile directement</li>
+        </ul>
+    </div>
+
+    {{-- === API 2 : INSCRIPTION === --}}
+    <div id="register" class="mb-8 mt-12 border-b border-gray-200 pb-2">
+        <h2 class="text-xl font-bold text-batid-marine">API 2 — Inscription (creation d'abonne)</h2>
+    </div>
+
+    {{-- Principe register --}}
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Principe</h2>
+        <p class="mb-3 text-sm text-gray-700">Le backend bat-id peut creer un abonne dans le systeme subscribers en appelant une URL signee. L'abonne est enregistre avec son bat-ID et son numero de telephone.</p>
+        <p class="text-sm text-gray-700">Le systeme verifie qu'aucun abonne avec le meme bat-ID ou le meme numero de telephone n'existe deja. La reponse est un <strong>JSON structure</strong> indiquant le succes ou la raison de l'echec.</p>
+    </div>
+
+    {{-- Register test generator --}}
+    @if($secretConfigured)
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Generateur de test</h2>
+        <p class="mb-3 text-sm text-gray-500">Chaque clic genere un numero de telephone et un bat-ID aleatoires.</p>
+        <form method="GET" action="{{ route('admin.api.test-register-token') }}">
+            <button type="submit" class="rounded-lg bg-batid-bleu px-4 py-2 text-sm text-white hover:bg-batid-marine">Generer une URL d'inscription test</button>
+        </form>
+
+        @if(session('register_url'))
+        <div class="mt-4 space-y-3">
+            <div class="flex gap-4 text-sm">
+                <span class="text-gray-500">Telephone :</span><span class="font-mono font-medium">{{ session('register_phone') }}</span>
+                <span class="text-gray-500">bat-ID :</span><span class="font-mono font-medium">{{ session('register_bat_id') }}</span>
+            </div>
+            <div x-data="{ copied: false }">
+                <p class="mb-1.5 text-xs font-semibold text-gray-500">URL generee</p>
+                <div class="flex items-center gap-2 rounded-lg bg-gray-900 p-3 cursor-pointer group"
+                     @click="navigator.clipboard.writeText('{{ session('register_url') }}'); copied = true; setTimeout(() => copied = false, 2000)">
+                    <div class="flex-1 min-w-0 overflow-x-auto">
+                        <code class="whitespace-nowrap text-sm text-green-400">{{ session('register_url') }}</code>
+                    </div>
+                    <span x-show="!copied" class="flex-shrink-0 text-gray-400 group-hover:text-white transition">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </span>
+                    <span x-show="copied" x-cloak class="flex-shrink-0 text-sm font-medium text-green-400">Copie !</span>
+                </div>
+            </div>
+            <a href="{{ session('register_url') }}" target="_blank" class="inline-flex items-center gap-1.5 text-sm text-batid-bleu hover:underline">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                Tester dans le navigateur (reponse JSON)
+            </a>
+        </div>
+        @endif
+    </div>
+    @endif
+
+    {{-- URL register --}}
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">URL d'inscription</h2>
+        <div class="rounded-lg bg-gray-900 p-4">
+            <code class="text-sm text-green-400">GET {{ $baseUrl }}/api/register?token={TOKEN}</code>
+        </div>
+    </div>
+
+    {{-- Token register --}}
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Construction du token</h2>
+        <p class="mb-3 text-sm text-gray-700">Meme principe que le deeplink : base64url + HMAC-SHA256 avec la meme cle secrete partagee.</p>
+
+        <h3 class="mb-2 text-sm font-semibold text-gray-700">Payload JSON</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">{
+  "a": "register",       // action (obligatoire, valeur fixe)
+  "p": "+41791234567",   // numero de telephone (format international)
+  "b": "@iGgUwLLc",     // identifiant bat-id de l'utilisateur
+  "ts": 1713200000       // timestamp Unix (secondes)
+}</pre>
+        </div>
+        <p class="text-sm text-gray-500">Le champ <code class="rounded bg-gray-100 px-1">"a": "register"</code> distingue ce token d'un token deeplink. Un token deeplink ne peut pas etre utilise pour inscrire un abonne et vice-versa.</p>
+    </div>
+
+    {{-- Register code examples --}}
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Exemples d'implementation</h2>
+
+        <h3 class="mb-2 mt-4 text-sm font-semibold text-gray-700">PHP</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">$secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
+
+$payload = json_encode([
+    'a' => 'register',
+    'p' => '+41791234567',
+    'b' => '@iGgUwLLc',
+    'ts' => time(),
+]);
+
+$encoded = rtrim(strtr(base64_encode($payload), '+/', '-_'), '=');
+$signature = hash_hmac('sha256', $encoded, $secret);
+$token = $encoded . '.' . $signature;
+
+// Appel API
+$response = file_get_contents('{{ $baseUrl }}/api/register?token=' . $token);
+$result = json_decode($response, true);
+
+if ($result['status'] === 'success') {
+    echo "Abonné créé : " . $result['subscriber']['bat_id'];
+} else {
+    echo "Erreur : " . $result['message'];
+}</pre>
+        </div>
+
+        <h3 class="mb-2 text-sm font-semibold text-gray-700">JavaScript / Node.js</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">const crypto = require('crypto');
+
+const secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
+
+const payload = JSON.stringify({
+  a: 'register',
+  p: '+41791234567',
+  b: '@iGgUwLLc',
+  ts: Math.floor(Date.now() / 1000)
+});
+
+const encoded = Buffer.from(payload)
+  .toString('base64')
+  .replace(/\+/g, '-')
+  .replace(/\//g, '_')
+  .replace(/=+$/, '');
+
+const signature = crypto
+  .createHmac('sha256', secret)
+  .update(encoded)
+  .digest('hex');
+
+const url = `{{ $baseUrl }}/api/register?token=${encoded}.${signature}`;
+const res = await fetch(url);
+const result = await res.json();
+console.log(result);</pre>
+        </div>
+    </div>
+
+    {{-- Responses --}}
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Reponses JSON</h2>
+
+        <h3 class="mb-2 text-sm font-semibold text-green-700">Succes — HTTP 201</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">{
+  "status": "success",
+  "message": "Abonné créé avec succès.",
+  "subscriber": {
+    "id": 42,
+    "bat_id": "@iGgUwLLc",
+    "phone": "+41791234567",
+    "created_at": "2026-04-15T14:30:00+02:00"
+  }
+}</pre>
+        </div>
+
+        <h3 class="mb-2 text-sm font-semibold text-red-700">Conflit bat-ID — HTTP 409</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-red-400">{
+  "status": "error",
+  "code": "bat_id_exists",
+  "message": "Un abonné avec ce bat-ID existe déjà.",
+  "bat_id": "@iGgUwLLc"
+}</pre>
+        </div>
+
+        <h3 class="mb-2 text-sm font-semibold text-red-700">Conflit telephone — HTTP 409</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-red-400">{
+  "status": "error",
+  "code": "phone_exists",
+  "message": "Un abonné avec ce numéro de téléphone existe déjà.",
+  "phone": "+41791234567"
+}</pre>
+        </div>
+
+        <h3 class="mb-2 text-sm font-semibold text-red-700">Token invalide — HTTP 401</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-red-400">{
+  "status": "error",
+  "code": "invalid_token",
+  "message": "Token invalide, expiré ou signature incorrecte."
+}</pre>
+        </div>
+
+        <h3 class="mb-2 text-sm font-semibold text-red-700">Token manquant — HTTP 400</h3>
+        <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-red-400">{
+  "status": "error",
+  "code": "missing_token",
+  "message": "Le paramètre token est requis."
+}</pre>
+        </div>
+    </div>
+
+    {{-- Register security --}}
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Securite</h2>
+        <ul class="ml-4 list-disc space-y-1 text-sm text-gray-700">
+            <li>Meme cle secrete et meme algorithme que le deeplink</li>
+            <li>Le champ <code class="rounded bg-gray-100 px-1">"a": "register"</code> empeche la reutilisation d'un token deeplink comme token d'inscription</li>
+            <li>Verification des doublons sur bat-ID ET telephone (y compris les abonnes supprimes)</li>
+            <li>Token a usage unique implicite : le deuxieme appel echouera avec <code class="rounded bg-gray-100 px-1">bat_id_exists</code></li>
         </ul>
     </div>
 

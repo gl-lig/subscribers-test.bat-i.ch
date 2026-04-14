@@ -78,4 +78,23 @@ class AdminLogController extends Controller
 
         return back()->with('test_token', $token)->with('test_url', $url);
     }
+
+    public function generateTestRegisterToken(Request $request, DeeplinkService $deeplinkService)
+    {
+        if (empty(config('batid.deeplink_secret'))) {
+            return back()->with('error', 'DEEPLINK_SECRET n\'est pas configuré dans le fichier .env');
+        }
+
+        // Generate random phone and bat-id for testing
+        $phone = '+4179' . rand(1000000, 9999999);
+        $batId = '@' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 7);
+
+        $token = $deeplinkService->generateRegisterToken($phone, $batId);
+        $url = config('app.url') . '/api/register?token=' . $token;
+
+        return back()
+            ->with('register_url', $url)
+            ->with('register_phone', $phone)
+            ->with('register_bat_id', $batId);
+    }
 }

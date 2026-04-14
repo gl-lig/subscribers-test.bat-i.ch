@@ -1,8 +1,12 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-6">
+<div class="mb-6 flex items-center justify-between">
     <a href="{{ route('admin.subscribers.index') }}" class="text-sm text-batid-bleu hover:underline">&larr; Retour aux abonnés</a>
+    <form method="POST" action="{{ route('admin.subscribers.destroy', $subscriber) }}" onsubmit="return confirm('Supprimer cet abonné et toutes ses commandes ? Cette action est irréversible.')">
+        @csrf @method('DELETE')
+        <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700">Supprimer l'abonné</button>
+    </form>
 </div>
 
 <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
