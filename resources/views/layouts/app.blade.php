@@ -19,7 +19,7 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
                 <a href="{{ route('home') }}" class="flex items-center">
-                    <img src="{{ asset('assets/brand/BATID_Logo_blanc.svg') }}" alt="bat-id" class="h-7">
+                    <img src="{{ asset('assets/brand/BATID_Logo_blanc.svg') }}" alt="bat-id" class="h-8" style="min-width:120px;">
                 </a>
                 <div class="flex items-center gap-4">
                     <livewire:language-switcher />
