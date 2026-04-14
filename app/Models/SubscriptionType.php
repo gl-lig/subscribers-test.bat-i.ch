@@ -14,7 +14,7 @@ class SubscriptionType extends Model
         'status', 'sort_order', 'parcelles_count', 'parcelles_unlimited',
         'alertes_count', 'stockage_go', 'stockage_unlimited', 'cloud_externe',
         'lot_sauvegarde', 'workspace_enabled', 'workspace_count', 'workspace_unlimited',
-        'price_chf', 'discount_24_months', 'discount_36_months',
+        'price_chf', 'is_free', 'discount_24_months', 'discount_36_months',
     ];
 
     protected function casts(): array
@@ -27,6 +27,7 @@ class SubscriptionType extends Model
             'workspace_enabled' => 'boolean',
             'workspace_unlimited' => 'boolean',
             'price_chf' => 'decimal:2',
+            'is_free' => 'boolean',
             'discount_24_months' => 'decimal:2',
             'discount_36_months' => 'decimal:2',
         ];

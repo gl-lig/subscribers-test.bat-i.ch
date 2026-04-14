@@ -13,7 +13,7 @@
             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-batid-marine text-lg font-bold text-batid-vert">{{ $type->sort_order }}</div>
             <div>
                 <h3 class="font-semibold text-batid-marine">{{ $type->translation('fr')?->name ?? 'Sans nom' }}</h3>
-                <p class="text-sm text-gray-500">CHF {{ $type->price_chf }}/an
+                <p class="text-sm text-gray-500">{{ $type->is_free ? 'Gratuit' : 'CHF ' . $type->price_chf . '/an' }}
                     @if($type->discount_24_months > 0)
                         <span class="ml-2 text-green-600">-{{ $type->discount_24_months }}% sur 24m</span>
                     @endif

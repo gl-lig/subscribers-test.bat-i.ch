@@ -24,7 +24,8 @@
             </div>
             <div>
                 <label class="mb-1 block text-sm font-medium text-gray-700">Prix CHF / an</label>
-                <input type="number" step="0.01" name="price_chf" value="{{ old('price_chf', $type?->price_chf) }}" required class="w-full rounded-lg border-gray-300 text-sm">
+                <input type="number" step="0.01" name="price_chf" value="{{ old('price_chf', $type?->price_chf) }}" class="w-full rounded-lg border-gray-300 text-sm">
+                <label class="mt-2 flex items-center gap-2 text-sm"><input type="checkbox" name="is_free" value="1" {{ old('is_free', $type?->is_free) ? 'checked' : '' }} class="rounded border-gray-300 text-batid-bleu"> Gratuit</label>
             </div>
             <div>
                 <label class="mb-1 block text-sm font-medium text-gray-700">Rabais 24 mois (%)</label>

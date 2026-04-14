@@ -35,7 +35,8 @@ class AdminSubscriptionTypeController extends Controller
             'workspace_enabled' => 'boolean',
             'workspace_count' => 'nullable|integer|min:0',
             'workspace_unlimited' => 'boolean',
-            'price_chf' => 'required|numeric|min:0',
+            'price_chf' => 'nullable|numeric|min:0',
+            'is_free' => 'boolean',
             'discount_24_months' => 'nullable|numeric|min:0|max:100',
             'discount_36_months' => 'nullable|numeric|min:0|max:100',
             'translations' => 'required|array',
@@ -44,6 +45,8 @@ class AdminSubscriptionTypeController extends Controller
 
         $type = SubscriptionType::create(array_merge($validated, [
             'sort_order' => SubscriptionType::max('sort_order') + 1,
+            'is_free' => $request->boolean('is_free'),
+            'price_chf' => $request->boolean('is_free') ? 0 : $request->input('price_chf', 0),
             'parcelles_unlimited' => $request->boolean('parcelles_unlimited'),
             'stockage_unlimited' => $request->boolean('stockage_unlimited'),
             'cloud_externe' => $request->boolean('cloud_externe'),
@@ -91,7 +94,8 @@ class AdminSubscriptionTypeController extends Controller
             'workspace_enabled' => $request->boolean('workspace_enabled'),
             'workspace_count' => $request->input('workspace_count'),
             'workspace_unlimited' => $request->boolean('workspace_unlimited'),
-            'price_chf' => $request->input('price_chf'),
+            'is_free' => $request->boolean('is_free'),
+            'price_chf' => $request->boolean('is_free') ? 0 : $request->input('price_chf', 0),
             'discount_24_months' => $request->input('discount_24_months', 0),
             'discount_36_months' => $request->input('discount_36_months', 0),
         ]);

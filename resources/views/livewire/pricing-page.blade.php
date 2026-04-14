@@ -92,14 +92,20 @@
                         <p class="mt-2 text-sm text-gray-500">{{ $trans?->description ?? '' }}</p>
 
                         <div class="mt-6">
+                            @if($type->is_free)
+                            <span class="text-4xl font-extrabold text-batid-vert">{{ __('Gratuit') }}</span>
+                            @else
                             <span class="text-4xl font-extrabold text-batid-marine">CHF {{ number_format($monthlyPrice, 2) }}</span>
                             <span class="text-sm text-gray-500">/ {{ __('mois') }}</span>
+                            @endif
                         </div>
 
-                        @if($selectedDuration > 12)
-                        <p class="mt-1 text-xs text-gray-400 line-through">CHF {{ number_format($baseMonthly, 2) }} / {{ __('mois') }}</p>
+                        @if(!$type->is_free)
+                            @if($selectedDuration > 12)
+                            <p class="mt-1 text-xs text-gray-400 line-through">CHF {{ number_format($baseMonthly, 2) }} / {{ __('mois') }}</p>
+                            @endif
+                            <p class="mt-1 text-xs text-gray-400">{{ __('Total') }}: CHF {{ number_format($totalPrice, 2) }} / {{ $selectedDuration }} {{ __('mois') }}</p>
                         @endif
-                        <p class="mt-1 text-xs text-gray-400">{{ __('Total') }}: CHF {{ number_format($totalPrice, 2) }} / {{ $selectedDuration }} {{ __('mois') }}</p>
 
                         <div class="mt-8 flex-1">
                             <x-subscription-features :type="$type" />
