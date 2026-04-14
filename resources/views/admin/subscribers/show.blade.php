@@ -32,7 +32,7 @@
             @foreach($subscriber->orders as $order)
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 text-sm font-medium">{{ $order->order_number }}</td>
-                <td class="px-4 py-3 text-sm">{{ $order->subscriptionType->translation('fr')?->name ?? '-' }}</td>
+                <td class="px-4 py-3 text-sm">{{ $order->subscriptionType?->translation('fr')?->name ?? '-' }}</td>
                 <td class="px-4 py-3 text-sm">{{ $order->duration_months }} mois</td>
                 <td class="px-4 py-3 text-sm font-medium">CHF {{ $order->price_paid }}</td>
                 <td class="px-4 py-3">
