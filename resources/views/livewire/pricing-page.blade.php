@@ -147,7 +147,9 @@
     </section>
 
     {{-- Section Fonctionnalités --}}
-    <x-features-explainer />
+    <div style="background: #3DFF9E; margin: 0 -9999px; padding: 0 9999px; overflow: hidden;">
+        <x-features-explainer />
+    </div>
 
     <!-- Phone modal -->
     @if($showPhoneModal)
