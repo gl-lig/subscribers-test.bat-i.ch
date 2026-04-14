@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->unique(['subscription_type_id', 'locale']);
+            $table->unique(['subscription_type_id', 'locale'], 'sub_type_trans_type_locale_unique');
         });
     }
 
