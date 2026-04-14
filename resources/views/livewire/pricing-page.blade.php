@@ -12,8 +12,11 @@
         <div class="flex rounded-xl bg-white p-1.5 shadow-lg ring-1 ring-gray-200">
             @foreach([12, 24, 36] as $d)
             <button wire:click="selectDuration({{ $d }})"
-                    class="flex-1 rounded-lg py-2.5 text-sm font-semibold transition {{ $selectedDuration === $d ? 'bg-batid-marine text-white shadow' : 'text-gray-600 hover:text-batid-marine' }}">
+                    class="relative flex-1 rounded-lg py-2.5 text-sm font-semibold transition {{ $selectedDuration === $d ? 'bg-batid-marine text-white shadow' : 'text-gray-600 hover:text-batid-marine' }}">
                 {{ __("$d mois") }}
+                @if(($maxDiscounts[$d] ?? 0) > 0)
+                <span class="absolute -right-1 -top-2.5 rounded-full bg-batid-vert px-1.5 py-0.5 text-[10px] font-bold leading-none text-batid-marine">-{{ $maxDiscounts[$d] }}%</span>
+                @endif
             </button>
             @endforeach
         </div>
@@ -31,13 +34,7 @@
                 $hasDiscount = $type->discountForDuration($selectedDuration) > 0;
                 $discountPct = $type->discountForDuration($selectedDuration);
             @endphp
-            <div wire:key="plan-{{ $type->id }}-{{ $selectedDuration }}" class="relative flex flex-col rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200 transition hover:shadow-lg hover:ring-batid-bleu/30">
-                @if($hasDiscount)
-                <div class="absolute -top-3 right-4 rounded-full bg-batid-vert px-3 py-1 text-xs font-bold text-batid-marine">
-                    -{{ intval($discountPct) }}%
-                </div>
-                @endif
-
+            <div wire:key="plan-{{ $type->id }}-{{ $selectedDuration }}" class="flex flex-col rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200 transition hover:shadow-lg hover:ring-batid-bleu/30">
                 <h3 class="text-xl font-bold text-batid-marine">{{ $trans?->name ?? 'N/A' }}</h3>
                 <p class="mt-2 text-sm text-gray-500">{{ $trans?->description ?? '' }}</p>
 
