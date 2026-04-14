@@ -34,12 +34,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="mt-20 border-t border-gray-100 bg-white py-10">
+    <footer class="mt-20 bg-white py-10">
         <div class="mx-auto max-w-2xl px-6">
 
             {{-- Suisse --}}
             <div class="flex flex-col items-center text-center">
-                <svg style="width:36px;height:36px;" viewBox="0 0 32 32" fill="none">
+                <svg style="width:29px;height:34px;" viewBox="0 0 32 38" fill="none">
                     <path d="M16 1L3 6v9c0 8.5 5.5 16.4 13 18 7.5-1.6 13-9.5 13-18V6L16 1z" fill="#D52B1E"/>
                     <rect x="13.5" y="8" width="5" height="16" rx="1" fill="white"/>
                     <rect x="8" y="13.5" width="16" height="5" rx="1" fill="white"/>
