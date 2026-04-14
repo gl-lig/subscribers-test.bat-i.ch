@@ -12,13 +12,13 @@ class DatatransService implements DatatransServiceInterface
 {
     private string $apiUrl;
     private string $merchantId;
-    private string $signKey;
+    private string $apiPassword;
 
     public function __construct()
     {
         $this->apiUrl = config('datatrans.api_url');
         $this->merchantId = config('datatrans.merchant_id');
-        $this->signKey = config('datatrans.sign_key');
+        $this->apiPassword = config('datatrans.api_password');
     }
 
     public function initializeTransaction(Order $order, string $successUrl, string $cancelUrl, string $errorUrl): array
@@ -44,7 +44,7 @@ class DatatransService implements DatatransServiceInterface
         ];
 
         try {
-            $response = Http::withBasicAuth($this->merchantId, $this->signKey)
+            $response = Http::withBasicAuth($this->merchantId, $this->apiPassword)
                 ->post("{$this->apiUrl}/v1/transactions", $payload);
 
             if ($response->successful()) {
@@ -116,7 +116,7 @@ class DatatransService implements DatatransServiceInterface
     public function getTransactionStatus(string $transactionId): array
     {
         try {
-            $response = Http::withBasicAuth($this->merchantId, $this->signKey)
+            $response = Http::withBasicAuth($this->merchantId, $this->apiPassword)
                 ->get("{$this->apiUrl}/v1/transactions/{$transactionId}");
 
             return $response->json();
