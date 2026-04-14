@@ -39,7 +39,7 @@ base64url(payload).hmac_sha256(base64url(payload), secret)
 ```json
 {
   "p": "+41791234567",   // Numéro de téléphone (format international, avec +)
-  "b": "BAT-ID-0001",   // Identifiant bat-id de l'utilisateur
+  "b": "@iGgUwLLc",   // Identifiant bat-id de l'utilisateur
   "t": 2,                // ID du type d'abonnement (voir ci-dessous)
   "d": 12,               // Durée en mois : 12, 24 ou 36 (optionnel, défaut: 12)
   "ts": 1713200000       // Timestamp Unix en secondes
@@ -86,7 +86,7 @@ $secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
 
 $payload = json_encode([
     'p' => '+41791234567',
-    'b' => 'BAT-ID-0001',
+    'b' => '@iGgUwLLc',
     't' => 2,    // Premium
     'd' => 12,   // 12 mois
     'ts' => time(),
@@ -108,7 +108,7 @@ const secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
 
 const payload = JSON.stringify({
   p: '+41791234567',
-  b: 'BAT-ID-0001',
+  b: '@iGgUwLLc',
   t: 2,
   d: 12,
   ts: Math.floor(Date.now() / 1000)
@@ -138,7 +138,7 @@ final secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
 
 final payload = jsonEncode({
   'p': '+41791234567',
-  'b': 'BAT-ID-0001',
+  'b': '@iGgUwLLc',
   't': 2,
   'd': 12,
   'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
