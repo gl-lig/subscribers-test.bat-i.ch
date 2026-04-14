@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.auth' => \App\Http\Middleware\AdminAuthenticate::class,
             'admin.2fa' => \App\Http\Middleware\AdminTwoFactor::class,
             'admin.timeout' => \App\Http\Middleware\AdminSessionTimeout::class,
+            'admin.full' => \App\Http\Middleware\AdminFullAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

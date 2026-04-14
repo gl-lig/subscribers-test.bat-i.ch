@@ -28,7 +28,7 @@ class AdminAdminController extends Controller
             'last_name' => 'required|string|max:100',
             'email' => 'required|email|unique:admins',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:super_admin,admin',
+            'role' => 'required|in:super_admin,admin,api_user',
             'notify_new_order' => 'boolean',
         ]);
 
@@ -55,7 +55,7 @@ class AdminAdminController extends Controller
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'email' => 'required|email|unique:admins,email,' . $admin->id,
-            'role' => 'required|in:super_admin,admin',
+            'role' => 'required|in:super_admin,admin,api_user',
             'status' => 'required|in:active,inactive',
             'notify_new_order' => 'boolean',
         ]);

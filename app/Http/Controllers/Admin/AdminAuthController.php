@@ -46,6 +46,10 @@ class AdminAuthController extends Controller
                 return redirect()->route('admin.2fa');
             }
 
+            if ($admin->isApiUser()) {
+                return redirect()->route('admin.logs.api');
+            }
+
             return redirect()->route('admin.dashboard');
         }
 
@@ -70,6 +74,11 @@ class AdminAuthController extends Controller
 
         if ($google2fa->verifyKey($admin->two_factor_secret, $request->code)) {
             $request->session()->put('admin_2fa_verified', true);
+
+            if ($admin->isApiUser()) {
+                return redirect()->route('admin.logs.api');
+            }
+
             return redirect()->route('admin.dashboard');
         }
 
