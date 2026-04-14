@@ -16,13 +16,13 @@
         @php $trans = $order->subscriptionType?->translation($locale); @endphp
 
         <!-- User identification -->
-        <div class="mb-6 flex items-center gap-4 rounded-2xl bg-white/90 px-6 py-4 shadow-lg backdrop-blur-sm">
+        <div class="mb-6 flex items-center gap-4 rounded-2xl bg-white px-6 py-5 shadow-2xl">
             <div class="flex h-14 w-10 flex-shrink-0 items-center justify-center rounded-xl" style="background: linear-gradient(to bottom, #00004D 0%, #0050FF 50%, #3DFF9E 100%);">
                 <img src="{{ asset('assets/brand/BATID_Monogramme_blanc.svg') }}" alt="bat-id" class="h-5 w-5">
             </div>
             <div class="min-w-0">
-                <p class="text-sm font-bold text-batid-marine">{{ $order->subscriber->bat_id ?? '-' }}</p>
-                <p class="text-sm text-gray-500">{{ $order->subscriber->phone ?? '-' }}</p>
+                <p class="text-base font-bold text-batid-marine">{{ $order->subscriber->bat_id ?? '-' }}</p>
+                <p class="text-sm font-medium text-gray-700">{{ $order->subscriber->phone ?? '-' }}</p>
             </div>
         </div>
 
