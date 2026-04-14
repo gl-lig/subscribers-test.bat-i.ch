@@ -24,6 +24,62 @@
         <p class="text-sm text-gray-700">Le lien contient un <strong>token signe</strong> (HMAC-SHA256) qui inclut le bat-ID de l'utilisateur, son numero de telephone, le type d'abonnement souhaite et la duree. Aucun appel API supplementaire n'est necessaire — les informations du token font foi. Le token expire apres <strong>{{ config('batid.deeplink_ttl', 600) / 60 }} minutes</strong>.</p>
     </div>
 
+    {{-- Test token generator --}}
+    @if($secretConfigured)
+    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Generateur de test</h2>
+        <form method="GET" action="{{ route('admin.api.test-token') }}" class="flex flex-wrap items-end gap-3">
+            <div>
+                <label class="mb-1 block text-xs text-gray-500">Telephone</label>
+                <input type="text" name="phone" value="{{ config('batid.mock_phone') }}" class="rounded-lg border-gray-300 text-sm" />
+            </div>
+            <div>
+                <label class="mb-1 block text-xs text-gray-500">bat-ID</label>
+                <input type="text" name="bat_id" value="{{ config('batid.mock_batid') }}" class="rounded-lg border-gray-300 text-sm" />
+            </div>
+            <div>
+                <label class="mb-1 block text-xs text-gray-500">Type ID</label>
+                <select name="type_id" class="rounded-lg border-gray-300 text-sm">
+                    @foreach($types as $type)
+                    <option value="{{ $type->id }}">{{ $type->id }} — {{ $type->translation('fr')?->name ?? '-' }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="mb-1 block text-xs text-gray-500">Duree (mois)</label>
+                <select name="duration" class="rounded-lg border-gray-300 text-sm">
+                    <option value="12">12</option>
+                    <option value="24">24</option>
+                    <option value="36">36</option>
+                </select>
+            </div>
+            <button type="submit" class="rounded-lg bg-batid-bleu px-4 py-2 text-sm text-white hover:bg-batid-marine">Generer un token test</button>
+        </form>
+
+        @if(session('test_url'))
+        <div class="mt-4 space-y-3">
+            <div x-data="{ copied: false }">
+                <p class="mb-1.5 text-xs font-semibold text-gray-500">URL generee</p>
+                <div class="flex items-center gap-2 rounded-lg bg-gray-900 p-3 cursor-pointer group"
+                     @click="navigator.clipboard.writeText('{{ session('test_url') }}'); copied = true; setTimeout(() => copied = false, 2000)">
+                    <div class="flex-1 min-w-0 overflow-x-auto">
+                        <code class="whitespace-nowrap text-sm text-green-400">{{ session('test_url') }}</code>
+                    </div>
+                    <span x-show="!copied" class="flex-shrink-0 text-gray-400 group-hover:text-white transition">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </span>
+                    <span x-show="copied" x-cloak class="flex-shrink-0 text-sm font-medium text-green-400">Copie !</span>
+                </div>
+            </div>
+            <a href="{{ session('test_url') }}" target="_blank" class="inline-flex items-center gap-1.5 text-sm text-batid-bleu hover:underline">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                Ouvrir dans un nouvel onglet
+            </a>
+        </div>
+        @endif
+    </div>
+    @endif
+
     {{-- URL --}}
     <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
         <h2 class="mb-3 text-lg font-semibold text-batid-marine">URL du deeplink</h2>
@@ -190,60 +246,5 @@ final url = '{{ $baseUrl }}/deeplink?token=$encoded.$signature';</pre>
         </ul>
     </div>
 
-    {{-- Test token generator --}}
-    @if($secretConfigured)
-    <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-        <h2 class="mb-3 text-lg font-semibold text-batid-marine">Generateur de test</h2>
-        <form method="GET" action="{{ route('admin.api.test-token') }}" class="flex flex-wrap items-end gap-3">
-            <div>
-                <label class="mb-1 block text-xs text-gray-500">Telephone</label>
-                <input type="text" name="phone" value="{{ config('batid.mock_phone') }}" class="rounded-lg border-gray-300 text-sm" />
-            </div>
-            <div>
-                <label class="mb-1 block text-xs text-gray-500">bat-ID</label>
-                <input type="text" name="bat_id" value="{{ config('batid.mock_batid') }}" class="rounded-lg border-gray-300 text-sm" />
-            </div>
-            <div>
-                <label class="mb-1 block text-xs text-gray-500">Type ID</label>
-                <select name="type_id" class="rounded-lg border-gray-300 text-sm">
-                    @foreach($types as $type)
-                    <option value="{{ $type->id }}">{{ $type->id }} — {{ $type->translation('fr')?->name ?? '-' }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="mb-1 block text-xs text-gray-500">Duree (mois)</label>
-                <select name="duration" class="rounded-lg border-gray-300 text-sm">
-                    <option value="12">12</option>
-                    <option value="24">24</option>
-                    <option value="36">36</option>
-                </select>
-            </div>
-            <button type="submit" class="rounded-lg bg-batid-bleu px-4 py-2 text-sm text-white hover:bg-batid-marine">Generer un token test</button>
-        </form>
-
-        @if(session('test_url'))
-        <div class="mt-4 space-y-3">
-            <div x-data="{ copied: false }">
-                <p class="mb-1.5 text-xs font-semibold text-gray-500">URL generee</p>
-                <div class="flex items-center gap-2 rounded-lg bg-gray-900 p-3 cursor-pointer group"
-                     @click="navigator.clipboard.writeText('{{ session('test_url') }}'); copied = true; setTimeout(() => copied = false, 2000)">
-                    <div class="flex-1 min-w-0 overflow-x-auto">
-                        <code class="whitespace-nowrap text-sm text-green-400">{{ session('test_url') }}</code>
-                    </div>
-                    <span x-show="!copied" class="flex-shrink-0 text-gray-400 group-hover:text-white transition">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                    </span>
-                    <span x-show="copied" x-cloak class="flex-shrink-0 text-sm font-medium text-green-400">Copie !</span>
-                </div>
-            </div>
-            <a href="{{ session('test_url') }}" target="_blank" class="inline-flex items-center gap-1.5 text-sm text-batid-bleu hover:underline">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                Ouvrir dans un nouvel onglet
-            </a>
-        </div>
-        @endif
-    </div>
-    @endif
 </div>
 @endsection
