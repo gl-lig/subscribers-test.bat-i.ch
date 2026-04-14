@@ -15,11 +15,11 @@
 </head>
 <body class="min-h-screen bg-white font-sans text-batid-marine antialiased">
     <!-- Header -->
-    <header class="bg-batid-marine">
+    <header style="background: linear-gradient(to right, #3DFF9E 0%, #38F3A4 6%, #2DD3B6 12%, #1B9FD2 24%, #0050FF 44%, #00004D 72%);">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
                 <a href="{{ route('home') }}" class="flex items-center">
-                    <img src="{{ asset('assets/brand/BATID_Logo_blanc.svg') }}" alt="bat-id" class="h-8">
+                    <img src="{{ asset('assets/brand/BATID_Logo_blanc.svg') }}" alt="bat-id" class="h-7">
                 </a>
                 <div class="flex items-center gap-4">
                     <livewire:language-switcher />
