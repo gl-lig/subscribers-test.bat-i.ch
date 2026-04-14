@@ -100,7 +100,7 @@
         <div class="rounded-lg bg-gray-900 p-4 mb-4">
 <pre class="text-sm text-green-400">{
   "p": "+41791234567",   // numero de telephone (format international)
-  "b": "BAT-ID-0001",   // identifiant bat-id de l'utilisateur
+  "b": "@iGgUwLLc",   // identifiant bat-id de l'utilisateur
   "t": 2,                // ID du type d'abonnement (voir tableau ci-dessous)
   "d": 12,               // duree en mois : 12, 24 ou 36 (defaut: 12)
   "ts": 1713200000       // timestamp Unix (secondes)
@@ -151,7 +151,7 @@
 
 $payload = json_encode([
     'p' => '+41791234567',
-    'b' => 'BAT-ID-0001',
+    'b' => '@iGgUwLLc',
     't' => 2,
     'd' => 12,
     'ts' => time(),
@@ -172,7 +172,7 @@ const secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
 
 const payload = JSON.stringify({
   p: '+41791234567',
-  b: 'BAT-ID-0001',
+  b: '@iGgUwLLc',
   t: 2,
   d: 12,
   ts: Math.floor(Date.now() / 1000)
@@ -201,7 +201,7 @@ final secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
 
 final payload = jsonEncode({
   'p': '+41791234567',
-  'b': 'BAT-ID-0001',
+  'b': '@iGgUwLLc',
   't': 2,
   'd': 12,
   'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
