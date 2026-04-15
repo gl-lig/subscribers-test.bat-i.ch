@@ -14,7 +14,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="min-h-screen bg-white font-sans text-batid-marine antialiased">
+<body class="min-h-screen overflow-x-hidden bg-white font-sans text-batid-marine antialiased">
     <!-- Header -->
     <header class="bg-batid-marine">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

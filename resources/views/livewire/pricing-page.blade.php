@@ -147,7 +147,7 @@
     </section>
 
     {{-- Section Fonctionnalités --}}
-    <div style="background: #3DFF9E; margin: 0 -9999px; padding: 0 9999px; overflow: hidden;">
+    <div class="relative" style="background: #3DFF9E;">
         <x-features-explainer />
     </div>
 
