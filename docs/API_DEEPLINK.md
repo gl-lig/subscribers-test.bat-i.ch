@@ -343,6 +343,181 @@ const result = await res.json();
 
 ---
 
+# API 3 — Webhook sortant (notification vers bat-id)
+
+## Principe
+
+À chaque événement important (commande validée, upgrade, expiration imminente, expiration), le système subscribers envoie une notification automatique vers le backend bat-id via une URL tokenisée signée.
+
+Le token contient toutes les informations de la commande. Il utilise la même clé secrète et le même algorithme (HMAC-SHA256) que les API Deeplink et Inscription.
+
+---
+
+## Endpoint à implémenter côté bat-id
+
+```
+GET https://demo.bat-id.ch/api/subscribers/webhook?token={TOKEN}
+```
+
+---
+
+## Événements
+
+| Événement | Déclencheur |
+|---|---|
+| `subscription_activated` | Nouvelle commande validée (paiement confirmé) |
+| `subscription_upgraded` | Upgrade d'abonnement validée (paiement confirmé) |
+| `subscription_expiring_soon` | Abonnement expire dans 30 jours (cron quotidien) |
+| `subscription_expired` | Abonnement expiré (cron quotidien) |
+
+---
+
+## Contenu du token
+
+Le champ `"a": "webhook"` identifie ce type de token.
+
+### subscription_activated / subscription_upgraded
+
+```json
+{
+  "a": "webhook",
+  "e": "subscription_activated",
+  "ts": 1713200000,
+  "b": "@iGgUwLLc",
+  "invoice_url": "https://subscribers-test.apcom.app/invoice/abc-def-...",
+  "subscription": {
+    "order_id": "CMD-000042",
+    "type": "Premium",
+    "status": "active",
+    "started_at": "2026-04-15T00:00:00+02:00",
+    "expires_at": "2027-04-15T00:00:00+02:00",
+    "duration_months": 12,
+    "features": {
+      "parcelles": 50,
+      "parcelles_unlimited": false,
+      "alertes": 100,
+      "stockage_go": 10,
+      "stockage_unlimited": false,
+      "cloud_externe": true,
+      "lot_sauvegarde": true,
+      "workspace": true,
+      "workspace_quantity": 5,
+      "workspace_unlimited": false
+    }
+  }
+}
+```
+
+### subscription_expiring_soon / subscription_expired
+
+```json
+{
+  "a": "webhook",
+  "e": "subscription_expiring_soon",
+  "ts": 1713200000,
+  "b": "@iGgUwLLc",
+  "subscription": {
+    "order_id": "CMD-000042",
+    "type": "Premium",
+    "expires_at": "2027-04-15T00:00:00+02:00",
+    "days_remaining": 28
+  }
+}
+```
+
+---
+
+## Implémentation côté bat-id
+
+```php
+// GET /api/subscribers/webhook?token={TOKEN}
+
+$secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
+$token = $_GET['token'] ?? '';
+$parts = explode('.', $token);
+
+if (count($parts) !== 2) {
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'Token manquant']);
+    exit;
+}
+
+[$encoded, $signature] = $parts;
+
+// Vérifier la signature
+$expected = hash_hmac('sha256', $encoded, $secret);
+if (!hash_equals($expected, $signature)) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Signature invalide']);
+    exit;
+}
+
+// Décoder le payload
+$json = base64_decode(strtr($encoded, '-_', '+/'));
+$data = json_decode($json, true);
+
+// Vérifier l'action et l'expiration
+if ($data['a'] !== 'webhook' || (time() - $data['ts']) > 600) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Token invalide ou expiré']);
+    exit;
+}
+
+// Traiter l'événement
+switch ($data['e']) {
+    case 'subscription_activated':
+        // Activer les fonctionnalités pour cet utilisateur
+        break;
+    case 'subscription_upgraded':
+        // Mettre à jour les fonctionnalités
+        break;
+    case 'subscription_expiring_soon':
+        // Notifier l'utilisateur
+        break;
+    case 'subscription_expired':
+        // Désactiver les fonctionnalités
+        break;
+}
+
+http_response_code(200);
+echo json_encode(['status' => 'success', 'message' => 'Webhook traité']);
+```
+
+---
+
+## Réponse JSON attendue
+
+### Succès — HTTP 200
+
+```json
+{
+  "status": "success",
+  "message": "Webhook traité avec succès."
+}
+```
+
+### Erreur — HTTP 4xx/5xx
+
+```json
+{
+  "status": "error",
+  "message": "Description de l'erreur."
+}
+```
+
+**Retentatives automatiques** : en cas d'échec, le système réessaie jusqu'à 5 fois (1 min, 5 min, 15 min, 1 h, 24 h).
+
+---
+
+## Sécurité
+
+- Même clé secrète et même algorithme que les API Deeplink et Inscription
+- Le champ `"a": "webhook"` empêche la réutilisation croisée de tokens
+- Le champ `ts` permet de rejeter les tokens expirés
+- L'endpoint bat-id doit toujours vérifier la signature avant de traiter l'événement
+
+---
+
 ## Contact
 
 Pour obtenir la clé secrète partagée ou toute question technique :

@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class BatIdApiService implements BatIdServiceInterface
 {
+    private DeeplinkService $deeplinkService;
+
+    public function __construct(DeeplinkService $deeplinkService)
+    {
+        $this->deeplinkService = $deeplinkService;
+    }
+
     public function verifyPhone(string $phone): ?array
     {
         $url = config('batid.outgoing_api_url') . '/verify-phone';
@@ -43,21 +50,23 @@ class BatIdApiService implements BatIdServiceInterface
 
     public function notifySubscription(string $batId, string $event, array $data): bool
     {
-        $url = config('batid.outgoing_api_url') . '/subscription-notification';
-        $apiKey = config('batid.outgoing_api_key');
+        $webhookBaseUrl = config('batid.webhook_url');
         $timeout = config('batid.outgoing_timeout', 10);
 
-        $payload = array_merge(['bat_id' => $batId, 'event' => $event], $data);
-        $signature = hash_hmac('sha256', json_encode($payload), $apiKey);
+        if (empty($webhookBaseUrl)) {
+            Log::warning('BatIdApiService: BAT_ID_WEBHOOK_URL is not configured');
+            return false;
+        }
+
+        // Build token payload with all subscription data
+        $tokenData = array_merge(['b' => $batId], $data);
+        $token = $this->deeplinkService->generateWebhookToken($event, $tokenData);
+        $url = rtrim($webhookBaseUrl, '/') . '?token=' . $token;
+
+        $logPayload = ['bat_id' => $batId, 'event' => $event, 'data' => $data];
 
         try {
-            $response = Http::timeout($timeout)
-                ->withHeaders([
-                    'X-Subscribers-API-Key' => $apiKey,
-                    'X-Signature' => $signature,
-                    'Content-Type' => 'application/json',
-                ])
-                ->post($url, $payload);
+            $response = Http::timeout($timeout)->get($url);
 
             ApiLog::create([
                 'direction' => 'outgoing',
@@ -65,7 +74,7 @@ class BatIdApiService implements BatIdServiceInterface
                 'bat_id' => $batId,
                 'status' => $response->successful() ? 'success' : 'failed',
                 'attempts' => 1,
-                'payload' => $payload,
+                'payload' => $logPayload,
                 'response' => $response->json(),
             ]);
 
@@ -77,7 +86,7 @@ class BatIdApiService implements BatIdServiceInterface
                 'bat_id' => $batId,
                 'status' => 'error',
                 'attempts' => 1,
-                'payload' => $payload,
+                'payload' => $logPayload,
                 'response' => ['error' => $e->getMessage()],
             ]);
 
