@@ -1,20 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-<div class="mx-auto max-w-4xl" x-data="{ tab: '{{ session('register_url') ? 'register' : 'deeplink' }}' }">
+<div class="mx-auto max-w-4xl" x-data="{ tab: '{{ session('register_url') ? 'register' : (session('test_url') ? 'deeplink' : 'process') }}' }">
     <h1 class="mb-2 text-2xl font-bold text-batid-marine">Documentation API</h1>
     <p class="mb-6 text-sm text-gray-500">Documentation technique pour l'integration depuis l'application mobile bat-id</p>
-
-    {{-- Schema du processus --}}
-    <div class="mb-8 rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
-        <h2 class="mb-2 text-lg font-semibold text-batid-marine">Vue d'ensemble du processus</h2>
-        <p class="mb-8 text-sm text-gray-500">Les 3 interactions entre bat-id et subscribers</p>
 
         {{-- Etape 1 : Inscription --}}
         <div class="rounded-xl bg-blue-50 p-5 ring-1 ring-blue-200">
             <div class="flex items-center gap-3 mb-4">
                 <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold">1</div>
                 <span class="text-sm font-bold text-blue-800">INSCRIPTION</span>
-                <span class="rounded bg-blue-200 px-2 py-0.5 text-[10px] font-semibold text-blue-700">API 2 — Onglet Inscription</span>
+                <button @click="tab = 'register'" class="rounded bg-blue-200 px-2 py-0.5 text-[10px] font-semibold text-blue-700 hover:bg-blue-300 transition cursor-pointer">Voir documentation <i class="fa-solid fa-arrow-right text-[8px] ml-0.5"></i></button>
             </div>
             <div class="flex items-center justify-center gap-6">
                 <div class="rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-blue-200 text-center min-w-[100px]">
@@ -65,7 +60,7 @@
             <div class="flex items-center gap-3 mb-4">
                 <div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white text-xs font-bold">2</div>
                 <span class="text-sm font-bold text-green-800">COMMANDE VIA DEEPLINK</span>
-                <span class="rounded bg-green-200 px-2 py-0.5 text-[10px] font-semibold text-green-700">API 1 — Onglet Deeplink</span>
+                <button @click="tab = 'deeplink'" class="rounded bg-green-200 px-2 py-0.5 text-[10px] font-semibold text-green-700 hover:bg-green-300 transition cursor-pointer">Voir documentation <i class="fa-solid fa-arrow-right text-[8px] ml-0.5"></i></button>
             </div>
             <div class="flex items-center justify-center gap-5">
                 <div class="rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-green-200 text-center min-w-[100px]">
@@ -129,7 +124,7 @@
             <div class="flex items-center gap-3 mb-4">
                 <div class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-600 text-white text-xs font-bold">3</div>
                 <span class="text-sm font-bold text-amber-800">NOTIFICATION WEBHOOK</span>
-                <span class="rounded bg-amber-200 px-2 py-0.5 text-[10px] font-semibold text-amber-700">API 3 — Onglet Webhook sortant</span>
+                <button @click="tab = 'webhook'" class="rounded bg-amber-200 px-2 py-0.5 text-[10px] font-semibold text-amber-700 hover:bg-amber-300 transition cursor-pointer">Voir documentation <i class="fa-solid fa-arrow-right text-[8px] ml-0.5"></i></button>
             </div>
             <div class="flex items-center justify-center gap-6">
                 <div class="rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-amber-200 text-center min-w-[100px]">
@@ -165,33 +160,44 @@
             <p class="mt-4 text-xs text-gray-600 text-center">Des que la commande est validee, subscribers notifie automatiquement bat-id avec toutes les informations de l'abonnement.</p>
         </div>
 
-    </div>
-
-    {{-- Status --}}
-    <div class="mb-6 rounded-xl p-4 {{ $secretConfigured ? 'bg-green-50 ring-1 ring-green-200' : 'bg-red-50 ring-1 ring-red-200' }}">
-        <div class="flex items-center gap-2">
-            @if($secretConfigured)
-                <span class="inline-block h-2.5 w-2.5 rounded-full bg-green-500"></span>
-                <span class="text-sm font-medium text-green-800">DEEPLINK_SECRET configure — API active</span>
-            @else
-                <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-500"></span>
-                <span class="text-sm font-medium text-red-800">DEEPLINK_SECRET non configure dans .env — API inactive</span>
-            @endif
         </div>
     </div>
 
     {{-- Tabs --}}
     <div class="mb-6 flex border-b border-gray-200">
+        <button @click="tab = 'process'" :class="tab === 'process' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
+            Processus
+        </button>
         <button @click="tab = 'deeplink'" :class="tab === 'deeplink' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
-            1. Deeplink
+            Deeplink
         </button>
         <button @click="tab = 'register'" :class="tab === 'register' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
-            2. Inscription
+            Inscription
         </button>
         <button @click="tab = 'webhook'" :class="tab === 'webhook' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
-            3. Webhook sortant
+            Webhook sortant
         </button>
     </div>
+
+    {{-- ========== TAB PROCESSUS ========== --}}
+    <div x-show="tab === 'process'" x-cloak>
+
+        {{-- Status --}}
+        <div class="mb-6 rounded-xl p-4 {{ $secretConfigured ? 'bg-green-50 ring-1 ring-green-200' : 'bg-red-50 ring-1 ring-red-200' }}">
+            <div class="flex items-center gap-2">
+                @if($secretConfigured)
+                    <span class="inline-block h-2.5 w-2.5 rounded-full bg-green-500"></span>
+                    <span class="text-sm font-medium text-green-800">DEEPLINK_SECRET configure — API active</span>
+                @else
+                    <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-500"></span>
+                    <span class="text-sm font-medium text-red-800">DEEPLINK_SECRET non configure dans .env — API inactive</span>
+                @endif
+            </div>
+        </div>
+
+        <div class="mb-8 rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-2 text-lg font-semibold text-batid-marine">Vue d'ensemble du processus</h2>
+            <p class="mb-8 text-sm text-gray-500">Les 3 interactions entre bat-id et subscribers</p>
 
     {{-- ========== TAB 1 : DEEPLINK ========== --}}
     <div x-show="tab === 'deeplink'" x-cloak>
