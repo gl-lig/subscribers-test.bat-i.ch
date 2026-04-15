@@ -105,7 +105,7 @@ class AdminLogController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'section' => 'required|in:deeplink,register,webhook,default',
+            'section' => 'required|in:deeplink,register,webhook,default,subscriptions',
         ]);
 
         $secret = config('batid.deeplink_secret', '');
