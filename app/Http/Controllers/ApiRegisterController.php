@@ -34,7 +34,7 @@ class ApiRegisterController extends Controller
         }
 
         // Check if bat_id already exists
-        $existingBatId = Subscriber::withTrashed()->where('bat_id', $data['bat_id'])->first();
+        $existingBatId = Subscriber::where('bat_id', $data['bat_id'])->first();
         if ($existingBatId) {
             return response()->json([
                 'status' => 'error',
@@ -45,7 +45,7 @@ class ApiRegisterController extends Controller
         }
 
         // Check if phone already exists
-        $existingPhone = Subscriber::withTrashed()->where('phone', $data['phone'])->first();
+        $existingPhone = Subscriber::where('phone', $data['phone'])->first();
         if ($existingPhone) {
             return response()->json([
                 'status' => 'error',
