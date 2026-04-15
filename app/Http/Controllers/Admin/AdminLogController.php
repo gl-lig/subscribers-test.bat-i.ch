@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\NotifyBatIdJob;
+use App\Mail\ApiDocumentationMail;
 use App\Models\AdminActivityLog;
 use App\Models\ApiLog;
 use App\Models\Order;
 use App\Models\SubscriptionType;
+use App\Services\AdminLogService;
 use App\Services\DeeplinkService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AdminLogController extends Controller
 {
@@ -96,5 +99,38 @@ class AdminLogController extends Controller
             ->with('register_url', $url)
             ->with('register_phone', $phone)
             ->with('register_bat_id', $batId);
+    }
+
+    public function sendDocumentation(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'section' => 'required|in:deeplink,register,webhook,default',
+        ]);
+
+        $secret = config('batid.deeplink_secret', '');
+        $baseUrl = config('app.url');
+
+        $types = SubscriptionType::online()->ordered()->with('translations')->get()
+            ->map(fn ($t) => [
+                'id' => $t->id,
+                'name' => $t->translation('fr')?->name ?? '-',
+                'price' => (float) $t->price_chf,
+            ])->toArray();
+
+        Mail::to($request->input('email'))
+            ->send(new ApiDocumentationMail(
+                section: $request->input('section'),
+                secret: $secret,
+                baseUrl: $baseUrl,
+                types: $types,
+            ));
+
+        AdminLogService::log('email', 'api_documentation', null, [
+            'section' => $request->input('section'),
+            'recipient' => $request->input('email'),
+        ]);
+
+        return back()->with('doc_email_sent', $request->input('section'));
     }
 }

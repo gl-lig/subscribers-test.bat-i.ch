@@ -434,6 +434,37 @@ final url = '{{ $baseUrl }}/deeplink?token=$encoded.$signature';</pre>
             </ul>
         </div>
 
+        {{-- Envoyer par email --}}
+        <div class="mb-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-100" x-data="{ open: false }">
+            <button @click="open = !open" class="flex w-full items-center justify-between p-6 text-left cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-batid-bleu"></i>
+                    <span class="text-sm font-semibold text-batid-marine">Envoyer cette documentation par email</span>
+                </div>
+                <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-gray-400 text-xs transition-transform"></i>
+            </button>
+            <div x-show="open" x-cloak x-transition class="border-t border-gray-100 px-6 pb-6 pt-4">
+                <p class="mb-3 text-sm text-gray-500">Envoyez la documentation Deeplink (endpoint, cle secrete, payload, types disponibles et points importants) directement au developpeur.</p>
+                <form method="POST" action="{{ route('admin.api.send-documentation') }}" class="flex items-end gap-3">
+                    @csrf
+                    <input type="hidden" name="section" value="deeplink">
+                    <div class="flex-1">
+                        <label class="mb-1 block text-xs text-gray-500">Adresse email du destinataire</label>
+                        <input type="email" name="email" required placeholder="dev@example.com" class="w-full rounded-lg border-gray-300 text-sm">
+                    </div>
+                    <button type="submit" class="rounded-lg bg-batid-bleu px-5 py-2 text-sm font-medium text-white hover:bg-batid-marine transition">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i>Envoyer
+                    </button>
+                </form>
+                @if(session('doc_email_sent') === 'deeplink')
+                <div class="mt-3 flex items-center gap-2 rounded-lg bg-green-50 p-3 ring-1 ring-green-200">
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                    <span class="text-sm font-medium text-green-800">Documentation Deeplink envoyee avec succes.</span>
+                </div>
+                @endif
+            </div>
+        </div>
+
     </div>
 
     {{-- ========== TAB 2 : INSCRIPTION ========== --}}
@@ -635,6 +666,37 @@ console.log(result);</pre>
                 <li>Verification des doublons sur bat-ID ET telephone (y compris les abonnes supprimes)</li>
                 <li>Token a usage unique implicite : le deuxieme appel echouera avec <code class="rounded bg-gray-100 px-1">bat_id_exists</code></li>
             </ul>
+        </div>
+
+        {{-- Envoyer par email --}}
+        <div class="mb-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-100" x-data="{ open: false }">
+            <button @click="open = !open" class="flex w-full items-center justify-between p-6 text-left cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-batid-bleu"></i>
+                    <span class="text-sm font-semibold text-batid-marine">Envoyer cette documentation par email</span>
+                </div>
+                <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-gray-400 text-xs transition-transform"></i>
+            </button>
+            <div x-show="open" x-cloak x-transition class="border-t border-gray-100 px-6 pb-6 pt-4">
+                <p class="mb-3 text-sm text-gray-500">Envoyez la documentation Inscription (endpoint, cle secrete, payload, codes de reponse et points importants) directement au developpeur.</p>
+                <form method="POST" action="{{ route('admin.api.send-documentation') }}" class="flex items-end gap-3">
+                    @csrf
+                    <input type="hidden" name="section" value="register">
+                    <div class="flex-1">
+                        <label class="mb-1 block text-xs text-gray-500">Adresse email du destinataire</label>
+                        <input type="email" name="email" required placeholder="dev@example.com" class="w-full rounded-lg border-gray-300 text-sm">
+                    </div>
+                    <button type="submit" class="rounded-lg bg-batid-bleu px-5 py-2 text-sm font-medium text-white hover:bg-batid-marine transition">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i>Envoyer
+                    </button>
+                </form>
+                @if(session('doc_email_sent') === 'register')
+                <div class="mt-3 flex items-center gap-2 rounded-lg bg-green-50 p-3 ring-1 ring-green-200">
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                    <span class="text-sm font-medium text-green-800">Documentation Inscription envoyee avec succes.</span>
+                </div>
+                @endif
+            </div>
         </div>
 
     </div>
@@ -884,6 +946,37 @@ echo json_encode(['status' => 'success', 'message' => 'Webhook traite']);</pre>
             </ul>
         </div>
 
+        {{-- Envoyer par email --}}
+        <div class="mb-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-100" x-data="{ open: false }">
+            <button @click="open = !open" class="flex w-full items-center justify-between p-6 text-left cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-batid-bleu"></i>
+                    <span class="text-sm font-semibold text-batid-marine">Envoyer cette documentation par email</span>
+                </div>
+                <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-gray-400 text-xs transition-transform"></i>
+            </button>
+            <div x-show="open" x-cloak x-transition class="border-t border-gray-100 px-6 pb-6 pt-4">
+                <p class="mb-3 text-sm text-gray-500">Envoyez la documentation Webhook sortant (endpoint a implementer, evenements, cle secrete et points importants) directement au developpeur.</p>
+                <form method="POST" action="{{ route('admin.api.send-documentation') }}" class="flex items-end gap-3">
+                    @csrf
+                    <input type="hidden" name="section" value="webhook">
+                    <div class="flex-1">
+                        <label class="mb-1 block text-xs text-gray-500">Adresse email du destinataire</label>
+                        <input type="email" name="email" required placeholder="dev@example.com" class="w-full rounded-lg border-gray-300 text-sm">
+                    </div>
+                    <button type="submit" class="rounded-lg bg-batid-bleu px-5 py-2 text-sm font-medium text-white hover:bg-batid-marine transition">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i>Envoyer
+                    </button>
+                </form>
+                @if(session('doc_email_sent') === 'webhook')
+                <div class="mt-3 flex items-center gap-2 rounded-lg bg-green-50 p-3 ring-1 ring-green-200">
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                    <span class="text-sm font-medium text-green-800">Documentation Webhook envoyee avec succes.</span>
+                </div>
+                @endif
+            </div>
+        </div>
+
     </div>
 
     {{-- ========== TAB 5 : ABONNEMENT PAR DEFAUT ========== --}}
@@ -988,6 +1081,37 @@ const subscription = await response.json();
 
 console.log(subscription.translations.fr.name); // "Premium"
 console.log(subscription.price_chf);            // 149.00</pre>
+            </div>
+        </div>
+
+        {{-- Envoyer par email --}}
+        <div class="mb-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-100" x-data="{ open: false }">
+            <button @click="open = !open" class="flex w-full items-center justify-between p-6 text-left cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-batid-bleu"></i>
+                    <span class="text-sm font-semibold text-batid-marine">Envoyer cette documentation par email</span>
+                </div>
+                <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-gray-400 text-xs transition-transform"></i>
+            </button>
+            <div x-show="open" x-cloak x-transition class="border-t border-gray-100 px-6 pb-6 pt-4">
+                <p class="mb-3 text-sm text-gray-500">Envoyez la documentation Abonnement par defaut (endpoint public, format de reponse et points importants) directement au developpeur.</p>
+                <form method="POST" action="{{ route('admin.api.send-documentation') }}" class="flex items-end gap-3">
+                    @csrf
+                    <input type="hidden" name="section" value="default">
+                    <div class="flex-1">
+                        <label class="mb-1 block text-xs text-gray-500">Adresse email du destinataire</label>
+                        <input type="email" name="email" required placeholder="dev@example.com" class="w-full rounded-lg border-gray-300 text-sm">
+                    </div>
+                    <button type="submit" class="rounded-lg bg-batid-bleu px-5 py-2 text-sm font-medium text-white hover:bg-batid-marine transition">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i>Envoyer
+                    </button>
+                </form>
+                @if(session('doc_email_sent') === 'default')
+                <div class="mt-3 flex items-center gap-2 rounded-lg bg-green-50 p-3 ring-1 ring-green-200">
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                    <span class="text-sm font-medium text-green-800">Documentation Abonnement par defaut envoyee avec succes.</span>
+                </div>
+                @endif
             </div>
         </div>
 
