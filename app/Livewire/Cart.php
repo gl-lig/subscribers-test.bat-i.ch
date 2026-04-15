@@ -161,7 +161,7 @@ class Cart extends Component
                 $this->isUpgrade = true;
                 $this->currentOrderData = [
                     'type_name' => $currentOrder->subscriptionType->translation(app()->getLocale())?->name ?? '',
-                    'expires_at' => $currentOrder->expires_at->format('d.m.Y'),
+                    'expires_at' => $currentOrder->expires_at ? $currentOrder->expires_at->format('d.m.Y') : __('Illimité'),
                     'price_paid' => $currentOrder->price_paid,
                     'prorata' => $currentOrder->calculateProrata(),
                     'current_price_chf' => (float) $currentOrder->subscriptionType->price_chf,
