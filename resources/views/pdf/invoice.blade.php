@@ -1,249 +1,264 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
 <style>
-    @page { margin: 0; }
+    @page { margin: 40px 50px 80px; }
     body {
         font-family: DejaVu Sans, sans-serif;
-        font-size: 11px;
-        color: #1a1a2e;
+        font-size: 10px;
+        color: #222;
+        line-height: 1.5;
         margin: 0;
         padding: 0;
     }
 
-    /* Header band */
-    .header-band {
-        background: #00004D;
-        padding: 32px 50px 28px;
-    }
-    .header-table { width: 100%; }
-    .header-table td { vertical-align: middle; }
-    .header-logo img { height: 32px; }
-    .header-right { text-align: right; color: rgba(255,255,255,0.55); font-size: 10px; line-height: 1.6; }
-    .header-right strong { color: #ffffff; font-size: 11px; letter-spacing: 0.5px; }
+    /* Header */
+    .header { margin-bottom: 40px; }
+    .header table { width: 100%; }
+    .header td { vertical-align: top; }
+    .logo img { height: 28px; }
+    .company-info { text-align: right; font-size: 9px; color: #555; line-height: 1.7; }
+    .company-info strong { color: #222; font-size: 10px; }
 
-    /* Content */
-    .content { padding: 40px 50px 30px; }
-
-    /* Title row */
+    /* Document title */
     .doc-title {
-        font-size: 22px;
-        font-weight: bold;
-        color: #00004D;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 4px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #000;
+        letter-spacing: 0.5px;
+        margin-bottom: 3px;
     }
-    .doc-number { font-size: 12px; color: #666; margin-bottom: 30px; }
+    .doc-meta { font-size: 10px; color: #666; margin-bottom: 35px; }
 
     /* Address blocks */
-    .addr-table { width: 100%; margin-bottom: 35px; }
-    .addr-table td { vertical-align: top; width: 50%; }
+    .addresses { width: 100%; margin-bottom: 30px; }
+    .addresses td { vertical-align: top; width: 50%; padding-right: 30px; }
     .addr-label {
-        font-size: 9px;
-        font-weight: bold;
-        color: #00004D;
+        font-size: 8px;
+        font-weight: 700;
+        color: #888;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        border-bottom: 1px solid #00004D;
-        padding-bottom: 5px;
-        margin-bottom: 8px;
+        letter-spacing: 1.2px;
+        margin-bottom: 6px;
         display: block;
     }
-    .addr-body { font-size: 11px; line-height: 1.7; color: #333; margin-top: 8px; }
+    .addr-body { font-size: 10px; line-height: 1.8; color: #333; }
 
     /* Details */
-    .details-table { width: 100%; margin-bottom: 30px; border-collapse: collapse; }
-    .details-table td {
-        padding: 7px 12px;
-        font-size: 11px;
-        border-bottom: 1px solid #f0f0f0;
+    .details { width: 100%; margin-bottom: 25px; border-collapse: collapse; }
+    .details td {
+        padding: 6px 0;
+        font-size: 10px;
+        border-bottom: 1px solid #eee;
     }
-    .details-table td:first-child { color: #888; width: 140px; }
-    .details-table td:last-child { text-align: right; font-weight: 500; }
+    .details td:first-child { color: #888; width: 130px; }
 
     /* Separator */
-    .sep { border: none; border-top: 1px solid #e0e0e0; margin: 5px 0 25px; }
+    .sep { border: none; border-top: 1px solid #ddd; margin: 0 0 20px; }
 
-    /* Prices table */
-    .prices { width: 100%; border-collapse: collapse; }
+    /* Prices */
+    .prices { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
     .prices th {
-        background: #00004D;
-        color: #fff;
+        background: #f5f5f5;
         text-align: left;
-        padding: 10px 14px;
-        font-size: 9px;
-        font-weight: 600;
+        padding: 8px 10px;
+        font-size: 8px;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.8px;
+        color: #666;
+        border-bottom: 1px solid #ddd;
     }
     .prices th:last-child { text-align: right; }
-    .prices td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 11px; }
+    .prices td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; font-size: 10px; }
     .prices td:last-child { text-align: right; }
     .prices tr.discount td { color: #16a34a; }
-    .prices tr.subtotal td { border-top: 1px solid #ddd; font-weight: 500; background: #fafafa; }
     .prices tr.total td {
-        border-top: 2px solid #00004D;
-        font-weight: bold;
-        font-size: 13px;
-        padding-top: 12px;
-        padding-bottom: 12px;
+        border-top: 2px solid #222;
+        border-bottom: none;
+        font-weight: 700;
+        font-size: 12px;
+        padding-top: 10px;
     }
-    .prices tr.tva td { font-size: 10px; color: #666; border-bottom: none; }
 
-    /* Payment info */
-    .payment-info {
-        margin-top: 20px;
-        padding: 14px 16px;
-        background: #f8f9fa;
-        border: 1px solid #e8e8e8;
-        border-radius: 4px;
-        font-size: 10px;
-        color: #666;
+    /* TVA box */
+    .tva-box {
+        margin-top: 15px;
+        padding: 10px 12px;
+        background: #f9f9f9;
+        border: 1px solid #eee;
+        font-size: 9px;
+        color: #555;
+        line-height: 1.7;
     }
-    .payment-info table { width: 100%; }
-    .payment-info td { padding: 2px 0; }
-    .payment-info td:last-child { text-align: right; }
+    .tva-box table { width: 100%; border-collapse: collapse; }
+    .tva-box td { padding: 2px 0; }
+    .tva-box td:last-child { text-align: right; }
+    .tva-box .tva-label { font-weight: 700; color: #333; }
+
+    /* Payment */
+    .payment {
+        margin-top: 20px;
+        font-size: 9px;
+        color: #888;
+    }
+    .payment table { width: 100%; }
+    .payment td { padding: 2px 0; }
+    .payment td:last-child { text-align: right; }
 
     /* Footer */
-    .footer-band {
+    .footer {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        background: #f8f9fa;
-        border-top: 1px solid #e0e0e0;
-        padding: 16px 50px;
-        font-size: 9px;
-        color: #888;
+        padding: 12px 50px;
+        border-top: 1px solid #ddd;
+        font-size: 8px;
+        color: #999;
         line-height: 1.6;
     }
-    .footer-band table { width: 100%; }
-    .footer-band td { vertical-align: top; }
-    .footer-brand { font-weight: bold; color: #00004D; font-size: 10px; }
+    .footer table { width: 100%; }
+    .footer td { vertical-align: top; }
 </style>
 </head>
 <body>
-    {{-- HEADER BAND --}}
-    <div class="header-band">
-        <table class="header-table"><tr>
-            <td class="header-logo"><img src="{{ public_path('assets/brand/BATID_Logo_blanc.svg') }}" alt="bat-id"></td>
-            <td class="header-right">
+
+    {{-- HEADER --}}
+    <div class="header">
+        <table><tr>
+            <td class="logo"><img src="{{ public_path('assets/brand/BATID_Logo_bleu.svg') }}" alt="bat-id"></td>
+            <td class="company-info">
                 <strong>Bat-i SA</strong><br>
-                Rue de l'Hôpital 1, 1920 Martigny<br>
-                CHE-491.808.618 TVA
+                Rue de l'Hopital 1<br>
+                1920 Martigny, Suisse<br>
+                CHE-491.808.618 MWST
             </td>
         </tr></table>
     </div>
 
-    {{-- CONTENT --}}
-    <div class="content">
+    {{-- TITLE --}}
+    <div class="doc-title">Facture</div>
+    <div class="doc-meta">
+        N&deg; {{ $order->order_number }} &mdash; {{ $order->concluded_at?->format('d.m.Y') ?? now()->format('d.m.Y') }}
+    </div>
 
-        {{-- Title --}}
-        <div class="doc-title">Facture</div>
-        <div class="doc-number">{{ $order->order_number }} &mdash; {{ $order->concluded_at?->format('d.m.Y') ?? now()->format('d.m.Y') }}</div>
+    {{-- ADDRESSES --}}
+    <table class="addresses"><tr>
+        <td>
+            <span class="addr-label">Emetteur</span>
+            <div class="addr-body">
+                <strong>Bat-i SA</strong><br>
+                Rue de l'Hopital 1<br>
+                1920 Martigny<br>
+                Suisse<br>
+                <br>
+                IDE : CHE-491.808.618<br>
+                N&deg; TVA : CHE-491.808.618 MWST<br>
+                RC : CH-621.3.010.679-3
+            </div>
+        </td>
+        <td>
+            <span class="addr-label">Abonne</span>
+            <div class="addr-body">
+                bat-ID : <strong>{{ $subscriber->bat_id }}</strong><br>
+                Tel. : {{ $subscriber->phone }}
+            </div>
+        </td>
+    </tr></table>
 
-        {{-- Addresses --}}
-        <table class="addr-table"><tr>
-            <td>
-                <span class="addr-label">Émetteur</span>
-                <div class="addr-body">
-                    <strong>Bat-i SA</strong><br>
-                    Rue de l'Hôpital 1<br>
-                    1920 Martigny<br>
-                    Suisse<br>
-                    CHE-491.808.618 TVA
-                </div>
-            </td>
-            <td>
-                <span class="addr-label">Abonné</span>
-                <div class="addr-body">
-                    <strong>bat-ID : {{ $subscriber->bat_id }}</strong><br>
-                    Tél. : {{ $subscriber->phone }}
-                </div>
-            </td>
+    {{-- SUBSCRIPTION DETAILS --}}
+    <table class="details">
+        <tr><td>Abonnement</td><td>{{ $typeName }}</td></tr>
+        <tr><td>Duree</td><td>{{ $order->duration_months > 0 ? $order->duration_months . ' mois' : 'Illimitee' }}</td></tr>
+        <tr><td>Periode</td><td>{{ $order->starts_at->format('d.m.Y') }} — {{ $order->expires_at ? $order->expires_at->format('d.m.Y') : 'Illimite' }}</td></tr>
+    </table>
+
+    <hr class="sep">
+
+    {{-- PRICES --}}
+    @php
+        $tvaRate = 8.1;
+        $totalTTC = (float) $order->price_paid;
+        $totalHT = round($totalTTC / (1 + $tvaRate / 100), 2);
+        $tvaMontant = round($totalTTC - $totalHT, 2);
+    @endphp
+
+    <table class="prices">
+        <thead><tr><th>Description</th><th>Montant CHF</th></tr></thead>
+        <tbody>
+            <tr>
+                <td>{{ $typeName }} — {{ $order->duration_months > 0 ? $order->duration_months . ' mois' : 'Illimite' }}</td>
+                <td>{{ number_format($order->price_catalogue, 2) }}</td>
+            </tr>
+            @if($order->discount_duration_pct > 0)
+            <tr class="discount">
+                <td>Rabais duree {{ $order->duration_months }} mois (-{{ number_format($order->discount_duration_pct, 0) }}%)</td>
+                <td>-{{ number_format($order->price_catalogue * $order->discount_duration_pct / 100, 2) }}</td>
+            </tr>
+            @endif
+            @if($order->discount_promo_pct > 0)
+            @php
+                $afterDuration = $order->price_catalogue - ($order->price_catalogue * $order->discount_duration_pct / 100);
+                $promoAmount = $afterDuration * $order->discount_promo_pct / 100;
+            @endphp
+            <tr class="discount">
+                <td>Code promo {{ $order->promo_code }} (-{{ number_format($order->discount_promo_pct, 0) }}%)</td>
+                <td>-{{ number_format($promoAmount, 2) }}</td>
+            </tr>
+            @endif
+            @if($order->prorata_deducted > 0)
+            <tr class="discount">
+                <td>Prorata residuel abonnement precedent</td>
+                <td>-{{ number_format($order->prorata_deducted, 2) }}</td>
+            </tr>
+            @endif
+            <tr class="total">
+                <td>Total TTC</td>
+                <td>CHF {{ number_format($totalTTC, 2) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {{-- TVA BREAKDOWN --}}
+    <div class="tva-box">
+        <table>
+            <tr>
+                <td class="tva-label">Decomposition TVA</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Montant hors taxe (HT)</td>
+                <td>CHF {{ number_format($totalHT, 2) }}</td>
+            </tr>
+            <tr>
+                <td>TVA {{ number_format($tvaRate, 1) }}% incluse</td>
+                <td>CHF {{ number_format($tvaMontant, 2) }}</td>
+            </tr>
+            <tr>
+                <td><strong>Total TTC</strong></td>
+                <td><strong>CHF {{ number_format($totalTTC, 2) }}</strong></td>
+            </tr>
+        </table>
+    </div>
+
+    {{-- PAYMENT --}}
+    <div class="payment">
+        <table><tr>
+            <td>Moyen de paiement : {{ ucfirst($order->payment_method ?? '—') }}</td>
+            <td>Ref. transaction : {{ $order->datatrans_transaction_id ?? '—' }}</td>
         </tr></table>
-
-        {{-- Subscription details --}}
-        <table class="details-table">
-            <tr><td>Abonnement</td><td>{{ $typeName }}</td></tr>
-            <tr><td>Durée</td><td>{{ $order->duration_months > 0 ? $order->duration_months . ' mois' : 'Illimitée' }}</td></tr>
-            <tr><td>Période</td><td>{{ $order->starts_at->format('d.m.Y') }} — {{ $order->expires_at ? $order->expires_at->format('d.m.Y') : 'Illimité' }}</td></tr>
-        </table>
-
-        <hr class="sep">
-
-        {{-- Prices table --}}
-        @php
-            $tvaRate = 8.1;
-            $totalTTC = (float) $order->price_paid;
-            $totalHT = round($totalTTC / (1 + $tvaRate / 100), 2);
-            $tvaMontant = round($totalTTC - $totalHT, 2);
-        @endphp
-
-        <table class="prices">
-            <thead><tr><th>Description</th><th>Montant CHF</th></tr></thead>
-            <tbody>
-                <tr>
-                    <td>Prix catalogue TTC — {{ $typeName }}, {{ $order->duration_months }} mois</td>
-                    <td>{{ number_format($order->price_catalogue, 2) }}</td>
-                </tr>
-                @if($order->discount_duration_pct > 0)
-                <tr class="discount">
-                    <td>Rabais durée {{ $order->duration_months }} mois ({{ number_format($order->discount_duration_pct, 0) }}%)</td>
-                    <td>- {{ number_format($order->price_catalogue * $order->discount_duration_pct / 100, 2) }}</td>
-                </tr>
-                @endif
-                @if($order->discount_promo_pct > 0)
-                @php
-                    $afterDuration = $order->price_catalogue - ($order->price_catalogue * $order->discount_duration_pct / 100);
-                    $promoAmount = $afterDuration * $order->discount_promo_pct / 100;
-                @endphp
-                <tr class="discount">
-                    <td>Code promo {{ $order->promo_code }} ({{ number_format($order->discount_promo_pct, 0) }}%)</td>
-                    <td>- {{ number_format($promoAmount, 2) }}</td>
-                </tr>
-                @endif
-                @if($order->prorata_deducted > 0)
-                <tr class="discount">
-                    <td>Prorata résiduel abonnement précédent</td>
-                    <td>- {{ number_format($order->prorata_deducted, 2) }}</td>
-                </tr>
-                @endif
-                <tr class="subtotal">
-                    <td>Sous-total HT</td>
-                    <td>{{ number_format($totalHT, 2) }}</td>
-                </tr>
-                <tr class="tva">
-                    <td>TVA {{ number_format($tvaRate, 1) }}%</td>
-                    <td>{{ number_format($tvaMontant, 2) }}</td>
-                </tr>
-                <tr class="total">
-                    <td>Total TTC</td>
-                    <td>CHF {{ number_format($totalTTC, 2) }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        {{-- Payment info --}}
-        <div class="payment-info">
-            <table><tr>
-                <td>Moyen de paiement : {{ ucfirst($order->payment_method ?? '—') }}</td>
-                <td>Réf. transaction : {{ $order->datatrans_transaction_id ?? '—' }}</td>
-            </tr></table>
-        </div>
-
     </div>
 
     {{-- FOOTER --}}
-    <div class="footer-band">
+    <div class="footer">
         <table><tr>
             <td>
-                <span class="footer-brand">Bat-i SA</span><br>
-                Rue de l'Hôpital 1 &bull; 1920 Martigny &bull; Suisse
+                <strong style="color:#666;">Bat-i SA</strong><br>
+                Rue de l'Hopital 1, 1920 Martigny, Suisse
             </td>
             <td style="text-align:center;">
-                CHE-491.808.618 TVA<br>
-                Taux TVA : {{ number_format($tvaRate, 1) }}%
+                IDE : CHE-491.808.618<br>
+                N&deg; TVA : CHE-491.808.618 MWST
             </td>
             <td style="text-align:right;">
                 bat-id.ch<br>
@@ -251,4 +266,5 @@
             </td>
         </tr></table>
     </div>
+
 </body></html>
