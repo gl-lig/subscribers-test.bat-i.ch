@@ -39,6 +39,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/api/documentation', [AdminLogController::class, 'documentation'])->name('api.documentation');
         Route::get('/api/test-token', [AdminLogController::class, 'generateTestToken'])->name('api.test-token');
         Route::get('/api/test-register-token', [AdminLogController::class, 'generateTestRegisterToken'])->name('api.test-register-token');
+        Route::post('/api/send-documentation', [AdminLogController::class, 'sendDocumentation'])->name('api.send-documentation');
 
         // Profile — accessible to all roles
         Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
