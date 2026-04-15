@@ -14,7 +14,7 @@ class NotifyAdminsNewOrder
         $admins = Admin::notifiable()->get();
 
         foreach ($admins as $admin) {
-            Mail::to($admin->email)->queue(new NewOrderNotification($event->order));
+            Mail::to($admin->email)->send(new NewOrderNotification($event->order));
         }
     }
 }
