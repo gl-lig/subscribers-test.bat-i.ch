@@ -103,6 +103,20 @@ class DeeplinkService
     }
 
     /**
+     * Generate a webhook token for outgoing notifications to bat-id.
+     */
+    public function generateWebhookToken(string $event, array $data): string
+    {
+        $payload = json_encode(array_merge([
+            'a' => 'webhook',
+            'e' => $event,
+            'ts' => time(),
+        ], $data));
+
+        return $this->sign($payload);
+    }
+
+    /**
      * Validate and decode a register token.
      *
      * @return array{phone: string, bat_id: string}|null

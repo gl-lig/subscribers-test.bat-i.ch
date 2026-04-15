@@ -27,10 +27,17 @@ class BatIdMockService implements BatIdServiceInterface
 
     public function notifySubscription(string $batId, string $event, array $data): bool
     {
+        $deeplinkService = app(DeeplinkService::class);
+        $tokenData = array_merge(['b' => $batId], $data);
+        $token = $deeplinkService->generateWebhookToken($event, $tokenData);
+
+        $webhookUrl = config('batid.webhook_url');
+        $url = $webhookUrl ? rtrim($webhookUrl, '/') . '?token=' . $token : '(no webhook URL configured)';
+
         Log::info('BatIdMockService::notifySubscription', [
             'bat_id' => $batId,
             'event' => $event,
-            'data' => $data,
+            'webhook_url' => $url,
         ]);
 
         ApiLog::create([
@@ -39,7 +46,7 @@ class BatIdMockService implements BatIdServiceInterface
             'bat_id' => $batId,
             'status' => 'success',
             'attempts' => 1,
-            'payload' => $data,
+            'payload' => ['bat_id' => $batId, 'event' => $event, 'data' => $data, 'webhook_url' => $url],
             'response' => ['mock' => true, 'status' => 200],
         ]);
 

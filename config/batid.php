@@ -9,6 +9,9 @@ return [
     'outgoing_timeout' => (int) env('BAT_ID_OUTGOING_TIMEOUT', 10),
     'outgoing_max_retries' => (int) env('BAT_ID_OUTGOING_MAX_RETRIES', 5),
 
+    // Webhook sortant (notification vers bat-id)
+    'webhook_url' => env('BAT_ID_WEBHOOK_URL', ''),
+
     // Deeplink (URL parameters from bat-id app)
     'deeplink_secret' => env('DEEPLINK_SECRET', ''),
     'deeplink_ttl' => (int) env('DEEPLINK_TTL', 600), // seconds

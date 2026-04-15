@@ -25,6 +25,9 @@
         <button @click="tab = 'register'" :class="tab === 'register' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
             2. Inscription
         </button>
+        <button @click="tab = 'webhook'" :class="tab === 'webhook' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
+            3. Webhook sortant
+        </button>
     </div>
 
     {{-- ========== TAB 1 : DEEPLINK ========== --}}
@@ -459,6 +462,253 @@ console.log(result);</pre>
                 <li>Le champ <code class="rounded bg-gray-100 px-1">"a": "register"</code> empeche la reutilisation d'un token deeplink comme token d'inscription</li>
                 <li>Verification des doublons sur bat-ID ET telephone (y compris les abonnes supprimes)</li>
                 <li>Token a usage unique implicite : le deuxieme appel echouera avec <code class="rounded bg-gray-100 px-1">bat_id_exists</code></li>
+            </ul>
+        </div>
+
+    </div>
+
+    {{-- ========== TAB 3 : WEBHOOK SORTANT ========== --}}
+    <div x-show="tab === 'webhook'" x-cloak>
+
+        {{-- Principe webhook --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Principe</h2>
+            <p class="mb-3 text-sm text-gray-700">A chaque evenement important (commande validee, upgrade, expiration imminente, expiration), le systeme subscribers envoie une <strong>notification automatique</strong> vers le backend bat-id via une URL tokenisee signee.</p>
+            <p class="mb-3 text-sm text-gray-700">Le token contient toutes les informations de la commande. Le developpeur bat-id doit implementer un <strong>endpoint de reception</strong> qui valide le token et retourne une reponse JSON.</p>
+            <p class="text-sm text-gray-700">Le token utilise la <strong>meme cle secrete</strong> et le <strong>meme algorithme</strong> (HMAC-SHA256) que les API Deeplink et Inscription.</p>
+        </div>
+
+        {{-- Config status --}}
+        <div class="mb-6 rounded-xl p-4 {{ config('batid.webhook_url') ? 'bg-green-50 ring-1 ring-green-200' : 'bg-yellow-50 ring-1 ring-yellow-200' }}">
+            <div class="flex items-center gap-2">
+                @if(config('batid.webhook_url'))
+                    <span class="inline-block h-2.5 w-2.5 rounded-full bg-green-500"></span>
+                    <span class="text-sm font-medium text-green-800">Webhook configure : <code class="font-mono">{{ config('batid.webhook_url') }}</code></span>
+                @else
+                    <span class="inline-block h-2.5 w-2.5 rounded-full bg-yellow-500"></span>
+                    <span class="text-sm font-medium text-yellow-800">BAT_ID_WEBHOOK_URL non configure dans .env</span>
+                @endif
+            </div>
+        </div>
+
+        {{-- URL webhook --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Endpoint a implementer cote bat-id</h2>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+                <code class="text-sm text-green-400">GET https://demo.bat-id.ch/api/subscribers/webhook?token={TOKEN}</code>
+            </div>
+            <p class="text-sm text-gray-500">Le systeme subscribers appelle cette URL automatiquement a chaque evenement. Le developpeur bat-id doit creer cet endpoint.</p>
+        </div>
+
+        {{-- Events --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Evenements envoyes</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50"><tr>
+                        <th class="px-4 py-2 text-left text-xs font-semibold uppercase text-gray-500">Evenement (valeur "e")</th>
+                        <th class="px-4 py-2 text-left text-xs font-semibold uppercase text-gray-500">Declencheur</th>
+                    </tr></thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr>
+                            <td class="px-4 py-2 text-sm font-mono font-bold text-green-700">subscription_activated</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">Nouvelle commande validee (paiement confirme)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 text-sm font-mono font-bold text-blue-700">subscription_upgraded</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">Upgrade d'abonnement validee (paiement confirme)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 text-sm font-mono font-bold text-yellow-700">subscription_expiring_soon</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">Abonnement expire dans 30 jours (cron quotidien)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 text-sm font-mono font-bold text-red-700">subscription_expired</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">Abonnement expire (cron quotidien)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- Token payload --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Contenu du token</h2>
+            <p class="mb-3 text-sm text-gray-700">Le token est signe avec la meme cle secrete et le meme algorithme que les autres API. Le champ <code class="rounded bg-gray-100 px-1">"a": "webhook"</code> identifie ce type de token.</p>
+
+            <h3 class="mb-2 text-sm font-semibold text-green-700">subscription_activated / subscription_upgraded</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">{
+  "a": "webhook",
+  "e": "subscription_activated",
+  "ts": 1713200000,
+  "b": "@iGgUwLLc",
+  "invoice_url": "https://subscribers-test.apcom.app/invoice/abc-def-...",
+  "subscription": {
+    "order_id": "CMD-000042",
+    "type": "Premium",
+    "status": "active",
+    "started_at": "2026-04-15T00:00:00+02:00",
+    "expires_at": "2027-04-15T00:00:00+02:00",
+    "duration_months": 12,
+    "features": {
+      "parcelles": 50,
+      "parcelles_unlimited": false,
+      "alertes": 100,
+      "stockage_go": 10,
+      "stockage_unlimited": false,
+      "cloud_externe": true,
+      "lot_sauvegarde": true,
+      "workspace": true,
+      "workspace_quantity": 5,
+      "workspace_unlimited": false
+    }
+  }
+}</pre>
+            </div>
+
+            <h3 class="mb-2 text-sm font-semibold text-yellow-700">subscription_expiring_soon</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">{
+  "a": "webhook",
+  "e": "subscription_expiring_soon",
+  "ts": 1713200000,
+  "b": "@iGgUwLLc",
+  "subscription": {
+    "order_id": "CMD-000042",
+    "type": "Premium",
+    "expires_at": "2027-04-15T00:00:00+02:00",
+    "days_remaining": 28
+  }
+}</pre>
+            </div>
+
+            <h3 class="mb-2 text-sm font-semibold text-red-700">subscription_expired</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">{
+  "a": "webhook",
+  "e": "subscription_expired",
+  "ts": 1713200000,
+  "b": "@iGgUwLLc",
+  "subscription": {
+    "order_id": "CMD-000042",
+    "type": "Premium",
+    "expires_at": "2027-04-15T00:00:00+02:00",
+    "days_remaining": 0
+  }
+}</pre>
+            </div>
+        </div>
+
+        {{-- Implementation cote bat-id --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Implementation cote bat-id</h2>
+            <p class="mb-3 text-sm text-gray-700">Le developpeur bat-id doit implementer un endpoint GET qui :</p>
+            <ol class="ml-4 list-decimal space-y-1 text-sm text-gray-700 mb-4">
+                <li>Recupere le parametre <code class="rounded bg-gray-100 px-1">token</code> de l'URL</li>
+                <li>Separe le token en deux parties : <code class="rounded bg-gray-100 px-1">base64url</code> et <code class="rounded bg-gray-100 px-1">signature</code> (separees par un point)</li>
+                <li>Verifie la signature HMAC-SHA256 avec la cle secrete partagee</li>
+                <li>Decode le payload base64url en JSON</li>
+                <li>Verifie que <code class="rounded bg-gray-100 px-1">"a" === "webhook"</code></li>
+                <li>Verifie l'expiration via le champ <code class="rounded bg-gray-100 px-1">ts</code> (10 minutes par defaut)</li>
+                <li>Traite l'evenement selon le champ <code class="rounded bg-gray-100 px-1">e</code></li>
+                <li>Retourne une reponse JSON</li>
+            </ol>
+
+            <h3 class="mb-2 text-sm font-semibold text-gray-700">Exemple PHP (endpoint bat-id)</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">// GET /api/subscribers/webhook?token={TOKEN}
+
+$secret = 'VOTRE_CLE_SECRETE_PARTAGEE';
+$token = $_GET['token'] ?? '';
+$parts = explode('.', $token);
+
+if (count($parts) !== 2) {
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'Token manquant']);
+    exit;
+}
+
+[$encoded, $signature] = $parts;
+
+// Verifier la signature
+$expected = hash_hmac('sha256', $encoded, $secret);
+if (!hash_equals($expected, $signature)) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Signature invalide']);
+    exit;
+}
+
+// Decoder le payload
+$json = base64_decode(strtr($encoded, '-_', '+/'));
+$data = json_decode($json, true);
+
+// Verifier l'action et l'expiration
+if ($data['a'] !== 'webhook' || (time() - $data['ts']) > 600) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Token invalide ou expire']);
+    exit;
+}
+
+// Traiter l'evenement
+$event = $data['e'];
+$batId = $data['b'];
+
+switch ($event) {
+    case 'subscription_activated':
+        // Activer les fonctionnalites pour cet utilisateur
+        break;
+    case 'subscription_upgraded':
+        // Mettre a jour les fonctionnalites
+        break;
+    case 'subscription_expiring_soon':
+        // Notifier l'utilisateur
+        break;
+    case 'subscription_expired':
+        // Desactiver les fonctionnalites
+        break;
+}
+
+http_response_code(200);
+echo json_encode(['status' => 'success', 'message' => 'Webhook traite']);</pre>
+            </div>
+        </div>
+
+        {{-- Reponse attendue --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Reponse JSON attendue</h2>
+            <p class="mb-3 text-sm text-gray-700">Le systeme subscribers attend une reponse JSON avec un code HTTP 2xx pour considerer la notification comme reussie.</p>
+
+            <h3 class="mb-2 text-sm font-semibold text-green-700">Succes — HTTP 200</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">{
+  "status": "success",
+  "message": "Webhook traité avec succès."
+}</pre>
+            </div>
+
+            <h3 class="mb-2 text-sm font-semibold text-red-700">Erreur — HTTP 4xx/5xx</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-red-400">{
+  "status": "error",
+  "message": "Description de l'erreur."
+}</pre>
+            </div>
+
+            <div class="mt-4 rounded-lg bg-yellow-50 p-4 ring-1 ring-yellow-200">
+                <p class="text-sm text-yellow-800"><strong>Retentatives automatiques</strong> — En cas d'echec (timeout, erreur HTTP, erreur reseau), le systeme reessaie automatiquement jusqu'a 5 fois avec des delais croissants : 1 min, 5 min, 15 min, 1 h, 24 h.</p>
+            </div>
+        </div>
+
+        {{-- Securite webhook --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Securite</h2>
+            <ul class="ml-4 list-disc space-y-1 text-sm text-gray-700">
+                <li>Meme cle secrete et meme algorithme que les API Deeplink et Inscription</li>
+                <li>Le champ <code class="rounded bg-gray-100 px-1">"a": "webhook"</code> empeche la reutilisation d'un token deeplink ou register</li>
+                <li>Le champ <code class="rounded bg-gray-100 px-1">ts</code> permet de rejeter les tokens expires</li>
+                <li>L'endpoint bat-id doit toujours verifier la signature avant de traiter l'evenement</li>
+                <li>Les evenements sont journalises dans le BO (Journal API) avec possibilite de rejouer</li>
             </ul>
         </div>
 
