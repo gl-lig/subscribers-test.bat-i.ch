@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("ALTER TABLE admins MODIFY COLUMN role ENUM('super_admin', 'admin', 'api_user') DEFAULT 'admin'");
+        // api_user role is now supported via string column - no schema change needed
+        // The role column already accepts any string value including 'api_user'
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE admins MODIFY COLUMN role ENUM('super_admin', 'admin') DEFAULT 'admin'");
+        // Nothing to reverse
     }
 };
