@@ -65,22 +65,30 @@ class Order extends Model
 
     public function isActive(): bool
     {
-        return $this->status === 'active' && $this->expires_at->isFuture();
+        return $this->status === 'active' && ($this->expires_at === null || $this->expires_at->isFuture());
     }
 
     public function isExpired(): bool
     {
+        if ($this->expires_at === null) {
+            return false;
+        }
+
         return $this->status === 'expired' || $this->expires_at->isPast();
     }
 
     public function daysRemaining(): int
     {
+        if ($this->expires_at === null) {
+            return -1;
+        }
+
         return max(0, now()->diffInDays($this->expires_at, false));
     }
 
     public function calculateProrata(): float
     {
-        if (! $this->isActive()) {
+        if (! $this->isActive() || $this->expires_at === null) {
             return 0;
         }
 

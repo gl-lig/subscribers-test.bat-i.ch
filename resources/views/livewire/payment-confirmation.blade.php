@@ -31,9 +31,9 @@
             <dl class="space-y-3 text-sm">
                 <div class="flex justify-between"><dt class="text-gray-500">{{ __("Type d'abonnement") }}</dt><dd class="font-semibold">{{ $trans?->name ?? '' }}</dd></div>
                 <div class="flex justify-between"><dt class="text-gray-500">{{ __('Numéro de commande') }}</dt><dd class="font-mono">{{ $order->order_number }}</dd></div>
-                <div class="flex justify-between"><dt class="text-gray-500">{{ __('Durée') }}</dt><dd>{{ $order->duration_months }} {{ __('mois') }}</dd></div>
+                <div class="flex justify-between"><dt class="text-gray-500">{{ __('Durée') }}</dt><dd>{{ $order->duration_months > 0 ? $order->duration_months . ' ' . __('mois') : __('Illimitée') }}</dd></div>
                 <div class="flex justify-between"><dt class="text-gray-500">{{ __('Date de début') }}</dt><dd>{{ $order->starts_at->format('d.m.Y') }}</dd></div>
-                <div class="flex justify-between"><dt class="text-gray-500">{{ __('Date de fin') }}</dt><dd>{{ $order->expires_at->format('d.m.Y') }}</dd></div>
+                <div class="flex justify-between"><dt class="text-gray-500">{{ __('Date de fin') }}</dt><dd>{{ $order->expires_at ? $order->expires_at->format('d.m.Y') : __('Illimité') }}</dd></div>
                 <div class="flex justify-between border-t pt-3"><dt class="text-gray-500">{{ __('Montant payé') }}</dt><dd class="text-lg font-bold text-batid-marine">CHF {{ $order->price_paid }}</dd></div>
                 <div class="flex justify-between"><dt class="text-gray-500">{{ __('Moyen de paiement') }}</dt><dd>{{ ucfirst($order->payment_method ?? '-') }}</dd></div>
             </dl>

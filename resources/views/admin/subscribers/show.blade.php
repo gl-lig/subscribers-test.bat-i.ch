@@ -48,7 +48,7 @@
                         <span class="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">Remplacé</span>
                     @endif
                 </td>
-                <td class="px-4 py-3 text-xs text-gray-500">{{ $order->starts_at->format('d.m.Y') }} → {{ $order->expires_at->format('d.m.Y') }}</td>
+                <td class="px-4 py-3 text-xs text-gray-500">{{ $order->starts_at->format('d.m.Y') }} → {{ $order->expires_at ? $order->expires_at->format('d.m.Y') : __('Illimité') }}</td>
                 <td class="px-4 py-3 text-right">
                     <a href="{{ route('admin.orders.show', $order) }}" class="text-batid-bleu hover:text-batid-marine" title="Détail"><i class="fa-solid fa-eye"></i></a>
                 </td>
