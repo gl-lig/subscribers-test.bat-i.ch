@@ -26,7 +26,7 @@ class PricingPage extends Component
 
     public function render()
     {
-        $types = SubscriptionType::online()->where('is_free', false)->ordered()->with('translations')->get();
+        $types = SubscriptionType::online()->where('is_free', false)->orderBy('price_chf')->with('translations')->get();
         $locale = app()->getLocale();
 
         // Pre-calculate all prices for all durations (Alpine.js switches instantly)
