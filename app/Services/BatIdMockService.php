@@ -4,21 +4,33 @@ namespace App\Services;
 
 use App\Contracts\BatIdServiceInterface;
 use App\Models\ApiLog;
+use App\Models\Subscriber;
 use Illuminate\Support\Facades\Log;
 
 class BatIdMockService implements BatIdServiceInterface
 {
     public function verifyPhone(string $phone): ?array
     {
-        $mockPhone = config('batid.mock_phone');
-        $mockBatId = config('batid.mock_batid');
+        Log::info('BatIdMockService::verifyPhone', ['phone' => $phone]);
 
-        Log::info('BatIdMockService::verifyPhone', ['phone' => $phone, 'mock_phone' => $mockPhone]);
+        // If subscriber already exists with this phone, return their real bat-id
+        $existing = Subscriber::where('phone', $phone)->first();
+        if ($existing) {
+            return [
+                'bat_id' => $existing->bat_id,
+                'phone' => $existing->phone,
+            ];
+        }
 
-        if ($phone === $mockPhone) {
+        // In mock mode, accept any valid phone number (simulates bat-id app installed)
+        // A real phone number has at least 8 digits
+        $digits = preg_replace('/\D/', '', $phone);
+        if (strlen($digits) >= 8) {
+            // Generate a mock bat-id for new users
+            $mockBatId = '@' . substr(md5($phone . time()), 0, 7);
             return [
                 'bat_id' => $mockBatId,
-                'phone' => $mockPhone,
+                'phone' => $phone,
             ];
         }
 
