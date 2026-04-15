@@ -160,9 +160,6 @@
             <p class="mt-4 text-xs text-gray-600 text-center">Des que la commande est validee, subscribers notifie automatiquement bat-id avec toutes les informations de l'abonnement.</p>
         </div>
 
-        </div>
-    </div>
-
     {{-- Tabs --}}
     <div class="mb-6 flex border-b border-gray-200">
         <button @click="tab = 'process'" :class="tab === 'process' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
@@ -198,6 +195,9 @@
         <div class="mb-8 rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
             <h2 class="mb-2 text-lg font-semibold text-batid-marine">Vue d'ensemble du processus</h2>
             <p class="mb-8 text-sm text-gray-500">Les 3 interactions entre bat-id et subscribers</p>
+        </div>
+
+    </div>
 
     {{-- ========== TAB 1 : DEEPLINK ========== --}}
     <div x-show="tab === 'deeplink'" x-cloak>
