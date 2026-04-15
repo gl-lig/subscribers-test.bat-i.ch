@@ -151,13 +151,13 @@ body, button, input, select, textarea {
 .fe-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 9px 18px 9px 14px;
+  gap: 8px;
+  padding: 11px 22px 11px 16px;
   background: rgba(0,81,255,0.08);
   border: 1px solid rgba(0,81,255,0.18);
   border-radius: 9999px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   color: #0051FF;
   transition: all 0.18s ease;
@@ -175,7 +175,7 @@ body, button, input, select, textarea {
 }
 .fe-pill--active svg * { stroke: #ffffff !important; }
 
-.fe-pill__icon { font-size: 13px; flex-shrink: 0; opacity: 0.65; }
+.fe-pill__icon { font-size: 15px; flex-shrink: 0; opacity: 0.65; }
 .fe-pill--active .fe-pill__icon { opacity: 1; }
 
 /* Panel animations (Alpine x-transition) */
@@ -223,15 +223,15 @@ body, button, input, select, textarea {
 .fe-pitch__icon i { font-size: 22px; }
 
 .fe-pitch__title {
-  font-size: 20px; font-weight: 600;
+  font-size: 24px; font-weight: 600;
   color: #ffffff; line-height: 1.35;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .fe-pitch__text {
-  font-size: 14px; font-weight: 300;
+  font-size: 16px; font-weight: 300;
   line-height: 1.85;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.78);
 }
 
 /* Plans (droite) */
@@ -244,9 +244,9 @@ body, button, input, select, textarea {
 @media (max-width: 680px) { .fe-plans { padding: 24px; } }
 
 .fe-plans__label {
-  font-size: 10px; font-weight: 500;
+  font-size: 12px; font-weight: 500;
   letter-spacing: 0.20em; text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.50);
 }
 
 .fe-plans__rows { display: flex; flex-direction: column; gap: 8px; }
@@ -263,16 +263,16 @@ body, button, input, select, textarea {
   background: rgba(61,255,158,0.12);
 }
 
-.fe-plan-row__name { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.50); }
-.fe-plan-row--featured .fe-plan-row__name { color: rgba(255,255,255,0.80); }
+.fe-plan-row__name { font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.55); }
+.fe-plan-row--featured .fe-plan-row__name { color: rgba(255,255,255,0.85); }
 
 .fe-plan-row__val {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 15px; font-weight: 600;
   color: #ffffff;
 }
 .fe-plan-row--featured .fe-plan-row__val { color: #3DFF9E; }
-.fe-plan-row__val svg { width: 14px; height: 14px; flex-shrink: 0; }
+.fe-plan-row__val svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 .fe-ico-check { color: #3DFF9E; }
 .fe-ico-dash  { color: rgba(255,255,255,0.20); }
