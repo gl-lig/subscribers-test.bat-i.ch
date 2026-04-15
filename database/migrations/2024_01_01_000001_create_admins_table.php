@@ -14,8 +14,8 @@ return new class extends Migration
             $table->string('last_name', 100);
             $table->string('email', 255)->unique();
             $table->string('password', 255);
-            $table->enum('role', ['super_admin', 'admin'])->default('admin');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('role', 20)->default('admin');
+            $table->string('status', 20)->default('active');
             $table->boolean('notify_new_order')->default(true);
             $table->string('two_factor_secret', 255)->nullable();
             $table->timestamp('two_factor_confirmed_at')->nullable();
