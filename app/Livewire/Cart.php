@@ -152,8 +152,10 @@ class Cart extends Component
 
     private function checkUpgrade(): void
     {
+        $phone = session('bat_phone');
         $batId = session('bat_id');
-        $subscriber = Subscriber::where('bat_id', $batId)->first();
+        $subscriber = Subscriber::where('phone', $phone)->first()
+            ?? Subscriber::where('bat_id', $batId)->first();
 
         if ($subscriber) {
             $currentOrder = $subscriber->activeOrder();
@@ -189,7 +191,8 @@ class Cart extends Component
         $currentOrder = null;
 
         if ($this->isUpgrade) {
-            $subscriber = Subscriber::where('bat_id', session('bat_id'))->first();
+            $subscriber = Subscriber::where('phone', session('bat_phone'))->first()
+                ?? Subscriber::where('bat_id', session('bat_id'))->first();
             $currentOrder = $subscriber?->activeOrder();
         }
 
@@ -213,7 +216,8 @@ class Cart extends Component
             $currentOrder = null;
 
             if ($this->isUpgrade) {
-                $subscriber = \App\Models\Subscriber::where('bat_id', session('bat_id'))->first();
+                $subscriber = \App\Models\Subscriber::where('phone', session('bat_phone'))->first()
+                    ?? \App\Models\Subscriber::where('bat_id', session('bat_id'))->first();
                 $currentOrder = $subscriber?->activeOrder();
             }
 
