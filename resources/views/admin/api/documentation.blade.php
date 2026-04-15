@@ -21,6 +21,9 @@
         <button @click="tab = 'default'" :class="tab === 'default' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
             Abo par defaut
         </button>
+        <button @click="tab = 'subscriptions'" :class="tab === 'subscriptions' ? 'border-batid-bleu text-batid-bleu' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="border-b-2 px-6 py-3 text-sm font-semibold transition">
+            Abo publique
+        </button>
     </div>
 
     {{-- ========== TAB PROCESSUS ========== --}}
@@ -1110,6 +1113,206 @@ console.log(subscription.price_chf);            // 149.00</pre>
                 <div class="mt-3 flex items-center gap-2 rounded-lg bg-green-50 p-3 ring-1 ring-green-200">
                     <i class="fa-solid fa-circle-check text-green-600"></i>
                     <span class="text-sm font-medium text-green-800">Documentation Abonnement par defaut envoyee avec succes.</span>
+                </div>
+                @endif
+            </div>
+        </div>
+
+    </div>
+
+    {{-- ========== TAB 6 : ABONNEMENTS PUBLIQUES ========== --}}
+    <div x-show="tab === 'subscriptions'" x-cloak>
+
+        {{-- Principe --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Abonnements publiques</h2>
+            <p class="mb-3 text-sm text-gray-700">Cette API publique retourne la <strong>liste complete des types d'abonnement en ligne</strong> avec leurs tarifs, rabais, fonctionnalites et traductions multilingues.</p>
+            <p class="mb-3 text-sm text-gray-700">L'objectif est de permettre a tout logiciel connecte a bat-id (app mobile, site web, partenaires) d'afficher dynamiquement le catalogue d'abonnements sans le coder en dur.</p>
+            <div class="rounded-lg bg-amber-50 p-4 ring-1 ring-amber-200">
+                <div class="flex items-start gap-2">
+                    <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
+                    <p class="text-sm text-amber-800">Seuls les types d'abonnement avec le statut <strong>En ligne</strong> sont retournes. Les types hors ligne ou supprimes sont exclus automatiquement.</p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Endpoint --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Endpoint</h2>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+                <code class="text-sm text-green-400">GET {{ $baseUrl }}/api/subscriptions</code>
+            </div>
+            <ul class="ml-4 list-disc space-y-1 text-sm text-gray-700">
+                <li><strong>Methode</strong> : GET</li>
+                <li><strong>Authentification</strong> : aucune (endpoint public)</li>
+                <li><strong>Format de reponse</strong> : JSON Array</li>
+                <li><strong>Tri</strong> : par ordre d'affichage (sort_order) tel que configure dans le back-office</li>
+            </ul>
+        </div>
+
+        {{-- URL a copier --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">URL a integrer</h2>
+            <p class="mb-3 text-sm text-gray-500">Copiez cette URL pour l'utiliser dans vos applications :</p>
+            <div x-data="{ copied: false }">
+                <div class="flex items-center gap-2 rounded-lg bg-gray-900 p-3 cursor-pointer group"
+                     @click="navigator.clipboard.writeText('{{ $baseUrl }}/api/subscriptions'); copied = true; setTimeout(() => copied = false, 2000)">
+                    <div class="flex-1 min-w-0">
+                        <code class="text-sm text-green-400">{{ $baseUrl }}/api/subscriptions</code>
+                    </div>
+                    <span x-show="!copied" class="flex-shrink-0 text-gray-400 group-hover:text-white transition">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </span>
+                    <span x-show="copied" x-cloak class="flex-shrink-0 text-sm font-medium text-green-400">Copie !</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- Reponse --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Reponse JSON (200)</h2>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">[
+  {
+    "id": 1,
+    "status": "online",
+    "sort_order": 1,
+    "price_chf": 0.00,
+    "is_free": true,
+    "is_default": true,
+    "discount_24_months": 0.00,
+    "discount_36_months": 0.00,
+    "parcelles_count": 1,
+    "parcelles_unlimited": false,
+    "alertes_count": 0,
+    "stockage_go": 1,
+    "stockage_unlimited": false,
+    "cloud_externe": false,
+    "lot_sauvegarde": false,
+    "veille_robotisee": false,
+    "veille_count": 0,
+    "veille_unlimited": false,
+    "workspace_enabled": false,
+    "workspace_count": 0,
+    "workspace_unlimited": false,
+    "translations": {
+      "fr": { "name": "Starter", "description": "..." },
+      "de": { "name": "Starter", "description": "..." }
+    }
+  },
+  {
+    "id": 2,
+    "status": "online",
+    "sort_order": 2,
+    "price_chf": 149.00,
+    "is_free": false,
+    "is_default": false,
+    "discount_24_months": 10.00,
+    "discount_36_months": 15.00,
+    "parcelles_count": 10,
+    "parcelles_unlimited": false,
+    "alertes_count": 5,
+    "stockage_go": 20,
+    "stockage_unlimited": false,
+    "cloud_externe": true,
+    "lot_sauvegarde": true,
+    "veille_robotisee": true,
+    "veille_count": 3,
+    "veille_unlimited": false,
+    "workspace_enabled": true,
+    "workspace_count": 5,
+    "workspace_unlimited": false,
+    "translations": {
+      "fr": { "name": "Premium", "description": "..." },
+      "de": { "name": "Premium", "description": "..." }
+    }
+  }
+]</pre>
+            </div>
+        </div>
+
+        {{-- Erreur --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Erreur (404)</h2>
+            <p class="mb-3 text-sm text-gray-700">Si aucun type d'abonnement n'est en ligne :</p>
+            <div class="rounded-lg bg-gray-900 p-4">
+<pre class="text-sm text-red-400">{
+  "error": "no_subscriptions_available"
+}</pre>
+            </div>
+        </div>
+
+        {{-- Integration --}}
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+            <h2 class="mb-3 text-lg font-semibold text-batid-marine">Exemples d'integration</h2>
+
+            <h3 class="mb-2 mt-4 text-sm font-semibold text-gray-700">PHP</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">$response = file_get_contents('{{ $baseUrl }}/api/subscriptions');
+$subscriptions = json_decode($response, true);
+
+foreach ($subscriptions as $sub) {
+    echo $sub['translations']['fr']['name'];  // "Starter", "Premium", ...
+    echo " — CHF " . $sub['price_chf'];       // 0.00, 149.00, ...
+    echo " (default: " . ($sub['is_default'] ? 'oui' : 'non') . ")";
+}</pre>
+            </div>
+
+            <h3 class="mb-2 text-sm font-semibold text-gray-700">JavaScript / Node.js</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">const response = await fetch('{{ $baseUrl }}/api/subscriptions');
+const subscriptions = await response.json();
+
+subscriptions.forEach(sub => {
+  console.log(sub.translations.fr.name);  // "Starter", "Premium", ...
+  console.log(`CHF ${sub.price_chf}`);    // 0.00, 149.00, ...
+  console.log(`Default: ${sub.is_default}`);
+});</pre>
+            </div>
+
+            <h3 class="mb-2 text-sm font-semibold text-gray-700">Dart / Flutter</h3>
+            <div class="rounded-lg bg-gray-900 p-4 mb-4">
+<pre class="text-sm text-green-400">import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+final response = await http.get(
+  Uri.parse('{{ $baseUrl }}/api/subscriptions'),
+);
+final List subscriptions = jsonDecode(response.body);
+
+for (final sub in subscriptions) {
+  print(sub['translations']['fr']['name']);  // "Starter", "Premium", ...
+  print('CHF ${sub['price_chf']}');          // 0.00, 149.00, ...
+}</pre>
+            </div>
+        </div>
+
+        {{-- Envoyer par email --}}
+        <div class="mb-6 rounded-xl bg-white shadow-sm ring-1 ring-gray-100" x-data="{ open: false }">
+            <button @click="open = !open" class="flex w-full items-center justify-between p-6 text-left cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-batid-bleu"></i>
+                    <span class="text-sm font-semibold text-batid-marine">Envoyer cette documentation par email</span>
+                </div>
+                <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-gray-400 text-xs transition-transform"></i>
+            </button>
+            <div x-show="open" x-cloak x-transition class="border-t border-gray-100 px-6 pb-6 pt-4">
+                <p class="mb-3 text-sm text-gray-500">Envoyez la documentation Abonnements publiques (endpoint public, format de reponse et exemples d'integration) directement au developpeur.</p>
+                <form method="POST" action="{{ route('admin.api.send-documentation') }}" class="flex items-end gap-3">
+                    @csrf
+                    <input type="hidden" name="section" value="subscriptions">
+                    <div class="flex-1">
+                        <label class="mb-1 block text-xs text-gray-500">Adresse email du destinataire</label>
+                        <input type="email" name="email" required placeholder="dev@example.com" class="w-full rounded-lg border-gray-300 text-sm">
+                    </div>
+                    <button type="submit" class="rounded-lg bg-batid-bleu px-5 py-2 text-sm font-medium text-white hover:bg-batid-marine transition">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i>Envoyer
+                    </button>
+                </form>
+                @if(session('doc_email_sent') === 'subscriptions')
+                <div class="mt-3 flex items-center gap-2 rounded-lg bg-green-50 p-3 ring-1 ring-green-200">
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                    <span class="text-sm font-medium text-green-800">Documentation Abonnements publiques envoyee avec succes.</span>
                 </div>
                 @endif
             </div>

@@ -26,6 +26,7 @@ class ApiDocumentationMail extends Mailable
             'register' => 'Documentation API Inscription',
             'webhook' => 'Documentation API Webhook sortant',
             'default' => 'Documentation API Abonnement par defaut',
+            'subscriptions' => 'Documentation API Abonnements publiques',
         ];
 
         return new Envelope(

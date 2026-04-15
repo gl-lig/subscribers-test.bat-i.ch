@@ -72,6 +72,55 @@ Route::middleware('throttle:60,1')->get('/api/default-subscription', function ()
     ]);
 })->name('api.default-subscription');
 
+// Public API — online subscription types list
+Route::middleware('throttle:60,1')->get('/api/subscriptions', function () {
+    $types = \App\Models\SubscriptionType::online()
+        ->ordered()
+        ->with('translations')
+        ->get();
+
+    if ($types->isEmpty()) {
+        return response()->json(['error' => 'no_subscriptions_available'], 404);
+    }
+
+    $result = $types->map(function ($type) {
+        $translations = [];
+        foreach ($type->translations as $t) {
+            $translations[$t->locale] = [
+                'name' => $t->name,
+                'description' => $t->description,
+            ];
+        }
+
+        return [
+            'id' => $type->id,
+            'status' => $type->status,
+            'sort_order' => $type->sort_order,
+            'price_chf' => (float) $type->price_chf,
+            'is_free' => $type->is_free,
+            'is_default' => $type->is_default,
+            'discount_24_months' => (float) $type->discount_24_months,
+            'discount_36_months' => (float) $type->discount_36_months,
+            'parcelles_count' => $type->parcelles_count,
+            'parcelles_unlimited' => $type->parcelles_unlimited,
+            'alertes_count' => $type->alertes_count,
+            'stockage_go' => $type->stockage_go,
+            'stockage_unlimited' => $type->stockage_unlimited,
+            'cloud_externe' => $type->cloud_externe,
+            'lot_sauvegarde' => $type->lot_sauvegarde,
+            'veille_robotisee' => $type->veille_robotisee,
+            'veille_count' => $type->veille_count,
+            'veille_unlimited' => $type->veille_unlimited,
+            'workspace_enabled' => $type->workspace_enabled,
+            'workspace_count' => $type->workspace_count,
+            'workspace_unlimited' => $type->workspace_unlimited,
+            'translations' => $translations,
+        ];
+    });
+
+    return response()->json($result->values());
+})->name('api.subscriptions');
+
 // Health check
 Route::get('/health', function () {
     return response()->json(['status' => 'ok', 'timestamp' => now()->toIso8601String()]);

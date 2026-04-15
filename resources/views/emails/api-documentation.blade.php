@@ -24,6 +24,8 @@
                     <span style="color:#d97706;font-size:12px;font-weight:700;letter-spacing:0.5px;">&#9679; WEBHOOK SORTANT</span>
                 @elseif($section === 'default')
                     <span style="color:#7c3aed;font-size:12px;font-weight:700;letter-spacing:0.5px;">&#9679; ABONNEMENT PAR DEFAUT</span>
+                @elseif($section === 'subscriptions')
+                    <span style="color:#059669;font-size:12px;font-weight:700;letter-spacing:0.5px;">&#9679; ABONNEMENTS PUBLIQUES</span>
                 @endif
             </td>
         </tr></table>
@@ -42,10 +44,12 @@
             <p style="margin:0;font-size:14px;color:#555;line-height:1.6;">Voici les informations techniques pour implementer la <strong style="color:#00004D;">reception des webhooks</strong> de bat-id Subscribers. Le systeme envoie automatiquement des notifications lors d'evenements importants.</p>
         @elseif($section === 'default')
             <p style="margin:0;font-size:14px;color:#555;line-height:1.6;">Voici les informations pour recuperer l'<strong style="color:#00004D;">abonnement par defaut</strong> configure dans bat-id Subscribers. Cette API publique permet a vos applications de savoir quel abonnement proposer par defaut.</p>
+        @elseif($section === 'subscriptions')
+            <p style="margin:0;font-size:14px;color:#555;line-height:1.6;">Voici les informations pour recuperer la <strong style="color:#00004D;">liste des abonnements publiques</strong> de bat-id Subscribers. Cette API publique retourne tous les types d'abonnement en ligne avec leurs tarifs, fonctionnalites et traductions.</p>
         @endif
     </td></tr>
 
-    @if($section !== 'default')
+    @if($section !== 'default' && $section !== 'subscriptions')
     {{-- Bloc cle secrete --}}
     <tr><td style="padding:0 40px 20px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="background:#00004D;border-radius:12px;overflow:hidden;">
@@ -377,6 +381,51 @@
                 &#8226; Retourne HTTP 404 si aucun type par defaut n'est configure<br>
                 &#8226; Le type par defaut est gere par l'administrateur dans le back-office<br>
                 &#8226; Utilisez cette API pour afficher dynamiquement l'offre par defaut dans vos interfaces
+            </td></tr>
+        </table>
+    </td></tr>
+
+    @elseif($section === 'subscriptions')
+    {{-- PUBLIC SUBSCRIPTIONS --}}
+    <tr><td style="padding:0 40px 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fb;border-radius:12px;border:1px solid #e8eaed;overflow:hidden;">
+            <tr><td style="padding:14px 20px 10px;">
+                <p style="margin:0;font-size:10px;font-weight:700;color:#00004D;text-transform:uppercase;letter-spacing:1.5px;">Endpoint</p>
+            </td></tr>
+            <tr><td style="padding:0 20px 16px;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;">
+                    <tr>
+                        <td style="padding:6px 0;color:#888;width:120px;">Methode</td>
+                        <td style="padding:6px 0;font-weight:600;color:#1a1a2e;">GET</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px 0;color:#888;">URL</td>
+                        <td style="padding:6px 0;color:#1a1a2e;font-family:'Courier New',monospace;font-size:12px;">{{ $baseUrl }}/api/subscriptions</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px 0;color:#888;">Authentification</td>
+                        <td style="padding:6px 0;color:#1a1a2e;">Aucune (endpoint public)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px 0;color:#888;">Reponse</td>
+                        <td style="padding:6px 0;color:#1a1a2e;">JSON Array (200) ou erreur (404)</td>
+                    </tr>
+                </table>
+            </td></tr>
+        </table>
+    </td></tr>
+
+    <tr><td style="padding:0 40px 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fb;border-radius:12px;border:1px solid #e8eaed;overflow:hidden;">
+            <tr><td style="padding:14px 20px 10px;">
+                <p style="margin:0;font-size:10px;font-weight:700;color:#00004D;text-transform:uppercase;letter-spacing:1.5px;">Points importants</p>
+            </td></tr>
+            <tr><td style="padding:0 20px 16px;font-size:13px;color:#555;line-height:1.8;">
+                &#8226; Endpoint public — aucune cle secrete ni authentification requise<br>
+                &#8226; Retourne un tableau JSON de tous les types d'abonnement en ligne<br>
+                &#8226; Chaque type inclut : prix, rabais, fonctionnalites et traductions multilingues<br>
+                &#8226; Tries par ordre d'affichage (sort_order) tel que configure dans le back-office<br>
+                &#8226; Retourne HTTP 404 si aucun abonnement n'est en ligne
             </td></tr>
         </table>
     </td></tr>
