@@ -103,10 +103,11 @@ class Cart extends Component
         $batId = session('bat_id');
         $phone = session('bat_phone');
 
-        $subscriber = Subscriber::firstOrCreate(
-            ['bat_id' => $batId],
-            ['phone' => $phone]
-        );
+        // Find existing subscriber by phone first (prevents duplicates),
+        // then by bat_id, then create if truly new
+        $subscriber = Subscriber::where('phone', $phone)->first()
+            ?? Subscriber::where('bat_id', $batId)->first()
+            ?? Subscriber::create(['bat_id' => $batId, 'phone' => $phone]);
 
         $type = SubscriptionType::findOrFail($this->typeId);
         $orderService = app(OrderServiceInterface::class);
