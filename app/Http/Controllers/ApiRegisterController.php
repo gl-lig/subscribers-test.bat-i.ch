@@ -7,6 +7,7 @@ use App\Models\Subscriber;
 use App\Models\SubscriptionType;
 use App\Services\DeeplinkService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ApiRegisterController extends Controller
@@ -55,42 +56,47 @@ class ApiRegisterController extends Controller
             ], 409);
         }
 
-        // Create subscriber
-        $subscriber = Subscriber::create([
-            'bat_id' => $data['bat_id'],
-            'phone' => $data['phone'],
-        ]);
-
-        // Assign default subscription type (free, unlimited duration)
-        $defaultType = SubscriptionType::where('is_default', true)->first();
-        $subscription = null;
-
-        if ($defaultType) {
-            $subscription = Order::create([
-                'order_number' => Order::generateOrderNumber(),
-                'subscriber_id' => $subscriber->id,
-                'subscription_type_id' => $defaultType->id,
-                'duration_months' => 0,
-                'price_catalogue' => 0,
-                'discount_duration_pct' => 0,
-                'price_paid' => 0,
-                'status' => 'active',
-                'concluded_at' => now(),
-                'starts_at' => now(),
-                'expires_at' => null,
-                'invoice_token' => Str::uuid(),
+        // Create subscriber + default order in a transaction (all or nothing)
+        $result = DB::transaction(function () use ($data) {
+            $subscriber = Subscriber::create([
+                'bat_id' => $data['bat_id'],
+                'phone' => $data['phone'],
             ]);
-        }
+
+            $defaultType = SubscriptionType::where('is_default', true)->first();
+
+            if ($defaultType) {
+                Order::create([
+                    'order_number' => Order::generateOrderNumber(),
+                    'subscriber_id' => $subscriber->id,
+                    'subscription_type_id' => $defaultType->id,
+                    'duration_months' => 0,
+                    'price_catalogue' => 0,
+                    'discount_duration_pct' => 0,
+                    'price_paid' => 0,
+                    'status' => 'active',
+                    'concluded_at' => now(),
+                    'starts_at' => now()->toDateString(),
+                    'expires_at' => null,
+                    'invoice_token' => Str::uuid()->toString(),
+                ]);
+            }
+
+            return [
+                'subscriber' => $subscriber,
+                'type_name' => $defaultType?->translation('fr')?->name,
+            ];
+        });
 
         return response()->json([
             'status' => 'success',
             'message' => 'Abonné créé avec succès.',
             'subscriber' => [
-                'id' => $subscriber->id,
-                'bat_id' => $subscriber->bat_id,
-                'phone' => $subscriber->phone,
-                'subscription_type' => $defaultType?->translation('fr')?->name,
-                'created_at' => $subscriber->created_at->toIso8601String(),
+                'id' => $result['subscriber']->id,
+                'bat_id' => $result['subscriber']->bat_id,
+                'phone' => $result['subscriber']->phone,
+                'subscription_type' => $result['type_name'],
+                'created_at' => $result['subscriber']->created_at->toIso8601String(),
             ],
         ], 201);
     }
