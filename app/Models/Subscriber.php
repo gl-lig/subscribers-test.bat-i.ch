@@ -22,7 +22,10 @@ class Subscriber extends Model
     {
         return $this->orders()
             ->where('status', 'active')
-            ->where('expires_at', '>', now())
+            ->where(function ($q) {
+                $q->whereNull('expires_at')
+                  ->orWhere('expires_at', '>', now());
+            })
             ->latest('starts_at')
             ->first();
     }

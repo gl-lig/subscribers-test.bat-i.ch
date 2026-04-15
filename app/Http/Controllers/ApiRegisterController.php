@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Subscriber;
+use App\Models\SubscriptionType;
 use App\Services\DeeplinkService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ApiRegisterController extends Controller
 {
@@ -58,6 +61,27 @@ class ApiRegisterController extends Controller
             'phone' => $data['phone'],
         ]);
 
+        // Assign default subscription type (free, unlimited duration)
+        $defaultType = SubscriptionType::where('is_default', true)->first();
+        $subscription = null;
+
+        if ($defaultType) {
+            $subscription = Order::create([
+                'order_number' => Order::generateOrderNumber(),
+                'subscriber_id' => $subscriber->id,
+                'subscription_type_id' => $defaultType->id,
+                'duration_months' => 0,
+                'price_catalogue' => 0,
+                'discount_duration_pct' => 0,
+                'price_paid' => 0,
+                'status' => 'active',
+                'concluded_at' => now(),
+                'starts_at' => now(),
+                'expires_at' => null,
+                'invoice_token' => Str::uuid(),
+            ]);
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Abonné créé avec succès.',
@@ -65,6 +89,7 @@ class ApiRegisterController extends Controller
                 'id' => $subscriber->id,
                 'bat_id' => $subscriber->bat_id,
                 'phone' => $subscriber->phone,
+                'subscription_type' => $defaultType?->translation('fr')?->name,
                 'created_at' => $subscriber->created_at->toIso8601String(),
             ],
         ], 201);

@@ -166,8 +166,8 @@
         {{-- Subscription details --}}
         <table class="details-table">
             <tr><td>Abonnement</td><td>{{ $typeName }}</td></tr>
-            <tr><td>Durée</td><td>{{ $order->duration_months }} mois</td></tr>
-            <tr><td>Période</td><td>{{ $order->starts_at->format('d.m.Y') }} — {{ $order->expires_at->format('d.m.Y') }}</td></tr>
+            <tr><td>Durée</td><td>{{ $order->duration_months > 0 ? $order->duration_months . ' mois' : 'Illimitée' }}</td></tr>
+            <tr><td>Période</td><td>{{ $order->starts_at->format('d.m.Y') }} — {{ $order->expires_at ? $order->expires_at->format('d.m.Y') : 'Illimité' }}</td></tr>
         </table>
 
         <hr class="sep">
