@@ -89,8 +89,10 @@ $features = [
 
 <section
   class="fe-section"
-  x-data="{ active: null }"
+  x-data="{ active: null, init() { const ids = [{{ collect($features)->map(fn($f) => "'".$f['id']."'")->implode(',') }}]; this.active = ids[Math.floor(Math.random() * ids.length)]; } }"
 >
+  <h2 class="fe-title" style="text-align:center;margin-bottom:2rem;">{{ __('Voici le détail de nos prestations avec comparatif par abonnement') }}</h2>
+
   {{-- PILLS --}}
   <nav class="fe-pills" aria-label="{{ __('Fonctionnalités BAT-ID') }}">
     @foreach ($features as $feature)
