@@ -89,7 +89,9 @@
                 </button>
                 <div></div>
                 <div class="flex items-center gap-4">
-                    <span class="text-sm text-gray-600">{{ auth()->guard('admin')->user()->full_name ?? '' }}</span>
+                    <a href="{{ route('admin.profile.index') }}" class="text-sm text-gray-600 hover:text-batid-bleu" title="Mon profil">
+                        <i class="fa-solid fa-user-circle mr-1"></i>{{ auth()->guard('admin')->user()->full_name ?? '' }}
+                    </a>
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit" class="text-sm text-red-600 hover:text-red-800" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"></i></button>

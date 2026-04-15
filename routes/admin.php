@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAdminController;
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminExportController;
 use App\Http\Controllers\Admin\AdminLanguageController;
@@ -38,6 +39,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/api/documentation', [AdminLogController::class, 'documentation'])->name('api.documentation');
         Route::get('/api/test-token', [AdminLogController::class, 'generateTestToken'])->name('api.test-token');
         Route::get('/api/test-register-token', [AdminLogController::class, 'generateTestRegisterToken'])->name('api.test-register-token');
+
+        // Profile — accessible to all roles
+        Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
+        Route::post('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/profile/2fa/setup', [AdminProfileController::class, 'setup2fa'])->name('profile.2fa.setup');
+        Route::post('/profile/2fa/confirm', [AdminProfileController::class, 'confirm2fa'])->name('profile.2fa.confirm');
+        Route::post('/profile/2fa/disable', [AdminProfileController::class, 'disable2fa'])->name('profile.2fa.disable');
 
         // Full access routes — blocked for api_user
         Route::middleware('admin.full')->group(function () {
