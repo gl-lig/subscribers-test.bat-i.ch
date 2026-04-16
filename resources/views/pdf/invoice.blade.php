@@ -137,7 +137,7 @@
     </div>
 
     {{-- TITLE --}}
-    <div class="doc-title">Facture</div>
+    <div class="doc-title">{{ __('Facture') }}</div>
     <div class="doc-meta">
         N&deg; {{ $order->order_number }} &mdash; {{ $order->concluded_at?->format('d.m.Y') ?? now()->format('d.m.Y') }}
     </div>
@@ -145,7 +145,7 @@
     {{-- ADDRESSES --}}
     <table class="addresses"><tr>
         <td>
-            <span class="addr-label">Emetteur</span>
+            <span class="addr-label">{{ __('Émetteur') }}</span>
             <div class="addr-body">
                 <strong>Bat-i SA</strong><br>
                 Rue de l'Hopital 1<br>
@@ -158,7 +158,7 @@
             </div>
         </td>
         <td>
-            <span class="addr-label">Abonne</span>
+            <span class="addr-label">{{ __('Abonné') }}</span>
             <div class="addr-body">
                 bat-ID : <strong>{{ $subscriber->bat_id }}</strong><br>
                 Tel. : {{ $subscriber->phone }}
@@ -168,14 +168,14 @@
 
     {{-- SUBSCRIPTION DETAILS --}}
     <table class="details">
-        <tr><td>Abonnement</td><td>{{ $typeName }}</td></tr>
-        <tr><td>Duree</td><td>{{ $order->duration_months > 0 ? $order->duration_months . ' mois' : 'Illimitee' }}</td></tr>
-        <tr><td>Periode</td><td>{{ $order->starts_at->format('d.m.Y') }} — {{ $order->expires_at ? $order->expires_at->format('d.m.Y') : 'Illimite' }}</td></tr>
+        <tr><td>{{ __('Abonnement') }}</td><td>{{ $typeName }}</td></tr>
+        <tr><td>{{ __('Durée') }}</td><td>{{ $order->duration_months > 0 ? $order->duration_months . ' ' . __('mois') : __('Illimitée') }}</td></tr>
+        <tr><td>{{ __('Période') }}</td><td>{{ $order->starts_at->format('d.m.Y') }} — {{ $order->expires_at ? $order->expires_at->format('d.m.Y') : __('Illimité') }}</td></tr>
     </table>
 
     @if($replacesOrder)
     <div style="margin-bottom:20px;padding:10px 12px;background:#fff8f0;border:1px solid #f0d9b5;font-size:9px;color:#7c5a2a;line-height:1.7;">
-        <strong>Cette commande remplace :</strong> {{ $replacesOrder->order_number }} — {{ $replacesOrder->subscriptionType?->translation($locale)?->name ?? '-' }} (du {{ $replacesOrder->starts_at->format('d.m.Y') }}{{ $replacesOrder->expires_at ? ' au ' . $replacesOrder->expires_at->format('d.m.Y') : '' }})
+        <strong>{{ __('Cette commande remplace :') }}</strong> {{ $replacesOrder->order_number }} — {{ $replacesOrder->subscriptionType?->translation($locale)?->name ?? '-' }} (du {{ $replacesOrder->starts_at->format('d.m.Y') }}{{ $replacesOrder->expires_at ? ' au ' . $replacesOrder->expires_at->format('d.m.Y') : '' }})
     </div>
     @endif
 
@@ -190,15 +190,15 @@
     @endphp
 
     <table class="prices">
-        <thead><tr><th>Description</th><th>Montant CHF</th></tr></thead>
+        <thead><tr><th>{{ __('Description') }}</th><th>{{ __('Montant CHF') }}</th></tr></thead>
         <tbody>
             <tr>
-                <td>{{ $typeName }} — {{ $order->duration_months > 0 ? $order->duration_months . ' mois' : 'Illimite' }}</td>
+                <td>{{ $typeName }} — {{ $order->duration_months > 0 ? $order->duration_months . ' ' . __('mois') : __('Illimité') }}</td>
                 <td>{{ number_format($order->price_catalogue, 2) }}</td>
             </tr>
             @if($order->discount_duration_pct > 0)
             <tr class="discount">
-                <td>Rabais duree {{ $order->duration_months }} mois (-{{ number_format($order->discount_duration_pct, 0) }}%)</td>
+                <td>{{ __('Rabais durée') }} {{ $order->duration_months }} {{ __('mois') }} (-{{ number_format($order->discount_duration_pct, 0) }}%)</td>
                 <td>-{{ number_format($order->price_catalogue * $order->discount_duration_pct / 100, 2) }}</td>
             </tr>
             @endif
@@ -208,18 +208,18 @@
                 $promoAmount = $afterDuration * $order->discount_promo_pct / 100;
             @endphp
             <tr class="discount">
-                <td>Code promo {{ $order->promo_code }} (-{{ number_format($order->discount_promo_pct, 0) }}%)</td>
+                <td>{{ __('Code promo') }} {{ $order->promo_code }} (-{{ number_format($order->discount_promo_pct, 0) }}%)</td>
                 <td>-{{ number_format($promoAmount, 2) }}</td>
             </tr>
             @endif
             @if($order->prorata_deducted > 0)
             <tr class="discount">
-                <td>Prorata residuel abonnement precedent</td>
+                <td>{{ __('Prorata résiduel abonnement précédent') }}</td>
                 <td>-{{ number_format($order->prorata_deducted, 2) }}</td>
             </tr>
             @endif
             <tr class="total">
-                <td>Total TTC</td>
+                <td>{{ __('Total TTC') }}</td>
                 <td>CHF {{ number_format($totalTTC, 2) }}</td>
             </tr>
         </tbody>
@@ -229,19 +229,19 @@
     <div class="tva-box">
         <table>
             <tr>
-                <td class="tva-label">Decomposition TVA</td>
+                <td class="tva-label">{{ __('Décomposition TVA') }}</td>
                 <td></td>
             </tr>
             <tr>
-                <td>Montant hors taxe (HT)</td>
+                <td>{{ __('Montant hors taxe (HT)') }}</td>
                 <td>CHF {{ number_format($totalHT, 2) }}</td>
             </tr>
             <tr>
-                <td>TVA {{ number_format($tvaRate, 1) }}% incluse</td>
+                <td>{{ __('TVA') }} {{ number_format($tvaRate, 1) }}% {{ __('incluse') }}</td>
                 <td>CHF {{ number_format($tvaMontant, 2) }}</td>
             </tr>
             <tr>
-                <td><strong>Total TTC</strong></td>
+                <td><strong>{{ __('Total TTC') }}</strong></td>
                 <td><strong>CHF {{ number_format($totalTTC, 2) }}</strong></td>
             </tr>
         </table>
@@ -250,8 +250,8 @@
     {{-- PAYMENT --}}
     <div class="payment">
         <table><tr>
-            <td>Moyen de paiement : {{ ucfirst($order->payment_method ?? '—') }}</td>
-            <td>Ref. transaction : {{ $order->datatrans_transaction_id ?? '—' }}</td>
+            <td>{{ __('Moyen de paiement') }} : {{ ucfirst($order->payment_method ?? '—') }}</td>
+            <td>{{ __('Réf. transaction') }} : {{ $order->datatrans_transaction_id ?? '—' }}</td>
         </tr></table>
     </div>
 
